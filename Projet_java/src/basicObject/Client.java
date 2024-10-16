@@ -111,5 +111,8 @@ public class Client {
 		this.clientID= id;
 	}
 	
+	public String afficherDetails() {
+		return "C'est le client n°"+String.valueOf(clientID);
+	}
 
 }

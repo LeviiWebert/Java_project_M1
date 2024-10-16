@@ -4,7 +4,23 @@ import java.time.LocalDate;
 
 public class Facture {
 	
-    private int id;                       // Identifiant unique de la facture
+    public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setCommande(Commande commande) {
+		this.commande = commande;
+	}
+
+	public void setDateFacture(LocalDate dateFacture) {
+		this.dateFacture = dateFacture;
+	}
+
+	public void setMontant(double montant) {
+		this.montant = montant;
+	}
+
+	private int id;                       // Identifiant unique de la facture
     private Commande commande;            // Référence à la commande associée
     private LocalDate dateFacture;        // Date à laquelle la facture a été générée
     private double montant;                // Montant total de la facture

@@ -9,9 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import basicObject.Client;
+import service.DateBDD;
 
 
-public class CustomerToDB {
+public class ClientToDB {
 	
 	public static void addCustomer(Client client) {
         String query = "INSERT INTO client (date_naissance, nom, prenom, email, telephone, adresse) VALUES (?, ?, ?, ?, ?, ?)";
@@ -78,8 +79,8 @@ public class CustomerToDB {
 	
 	
 	public static void main(String[] args) {
-		Client t = new Client();
-		addCustomer(null);
+		Client t = new Client(new DateBDD(2002,04,18).getDateBDD(),"Webert","Levi","leviwebert147@gmail.com","0651159650","6 avenue François Mitterand");
+		addCustomer(t);
 		
 	}
 	

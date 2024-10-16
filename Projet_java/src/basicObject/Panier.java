@@ -69,5 +69,30 @@ public class Panier {
         System.out.println("Panier validé. Commande créée pour le Client ID: " + clientId);
         return commande;                           // Retourner la commande
     }
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
+	public List<LigneCommande> getLignes() {
+		return lignes;
+	}
+
+	public void setLignes(List<LigneCommande> lignes) {
+		this.lignes = lignes;
+	}
+
+	public double getTotal() {
+		return total;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+    
 }
 
