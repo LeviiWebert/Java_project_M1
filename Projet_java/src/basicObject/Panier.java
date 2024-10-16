@@ -25,9 +25,9 @@ public class Panier {
             lignes.add(ligne);                      // Ajouter la ligne au panier
             total += ligne.getPrixTotal();         // Mettre à jour le total
             produit.reduireStock(quantite);        // Réduire le stock du produit
-            System.out.println(quantite + " " + produit.getNom() + " ajouté au panier.");
+            System.out.println(quantite + " " + produit.getMarque() + " ajouté au panier.");
         } else {
-            System.out.println("Stock insuffisant pour " + produit.getNom());
+            System.out.println("Stock insuffisant pour " + produit.getMarque());
         }
     }
 
@@ -37,12 +37,12 @@ public class Panier {
             if (ligne.getProduit().getId() == produit.getId()) {
                 total -= ligne.getPrixTotal();       // Mettre à jour le total
                 lignes.remove(ligne);                 // Retirer la ligne du panier
-                produit.setStock(produit.getStock() + ligne.getQuantite()); // Rétablir le stock du produit
-                System.out.println(produit.getNom() + " retiré du panier.");
+                produit.setQuantite_stock((produit.getQuantite_stock() + ligne.getQuantite())); // Rétablir le stock du produit
+                System.out.println(produit.getMarque() + " retiré du panier.");
                 return;                               // Sortir de la méthode
             }
         }
-        System.out.println(produit.getNom() + " n'est pas dans le panier.");
+        System.out.println(produit.getMarque() + " n'est pas dans le panier.");
     }
 
     // Méthode pour afficher les détails du panier

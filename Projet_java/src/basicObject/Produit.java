@@ -1,67 +1,130 @@
 package basicObject;
 
+import dataBase.DBToclient;
+import dataBase.DBToproduit;
+
 public class Produit {
-    private int id;                 // Identifiant unique du produit
-    private String nom;             // Nom du produit
-    private double prix;            // Prix unitaire du produit
-    private String description;      // Description du produit
-    private int stock;              // Quantité disponible en stock
-
-    // Constructeur
-    public Produit(int id, String nom, double prix, String description, int stock) {
+	
+    private int id;                 
+    private String marque;            
+    private String modele;            
+    private double prix;      
+    private String type;              
+    private String description;
+    private int quantite_stock;
+    
+    
+    public Produit() {
+    	//this.id = DBToproduit.getMaxClientID() + 1;   relation avec la base de donnee
+    }
+    
+    
+    public Produit(int id, String marque, String modele, double prix2, String type,String description,int quantite_stock) {
+    	
         this.id = id;
-        this.nom = nom;
-        this.prix = prix;
+        this.marque = marque ;
+        this.modele = modele;
+        this.prix = prix2;
+        this.type = type;
         this.description = description;
-        this.stock = stock;
+        this.quantite_stock = quantite_stock;
+        
     }
 
-    // Getters
+
     public int getId() {
-        return id;                  // Retourne l'identifiant du produit
-    }
+		return id;
+	}
 
-    public String getNom() {
-        return nom;                 // Retourne le nom du produit
-    }
 
-    public double getPrix() {
-        return prix;                // Retourne le prix unitaire du produit
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public String getDescription() {
-        return description;         // Retourne la description du produit
-    }
 
-    public int getStock() {
-        return stock;               // Retourne la quantité en stock
-    }
+	public String getMarque() {
+		return marque;
+	}
 
-    // Setter pour mettre à jour le stock
-    public void setStock(int stock) {
-        this.stock = stock;         // Met à jour la quantité en stock
-    }
 
-    // Méthode pour vérifier la disponibilité du produit
+	public void setMarque(String marque) {
+		this.marque = marque;
+	}
+
+
+	public String getModele() {
+		return modele;
+	}
+
+
+	public void setModele(String modele) {
+		this.modele = modele;
+	}
+
+
+	public double getPrix() {
+		return prix;
+	}
+
+
+	public void setPrix(int prix) {
+		this.prix = prix;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+
+	public int getQuantite_stock() {
+		return quantite_stock;
+	}
+
+
+	public void setQuantite_stock(int quantite_stock) {
+		this.quantite_stock = quantite_stock;
+	}
+
+
+	// Méthode pour vérifier la disponibilité du produit
     public boolean estDisponible(int quantite) {
-        return stock >= quantite;   // Vérifie si la quantité demandée est disponible
+        return getQuantite_stock() >= quantite;   // Vérifie si la quantité demandée est disponible
     }
 
     // Méthode pour réduire le stock lors d'une commande
     public void reduireStock(int quantite) {
         if (estDisponible(quantite)) {
-            stock -= quantite;      // Réduit le stock de la quantité commandée
+            quantite_stock -= quantite;      // Réduit le stock de la quantité commandée
+            setQuantite_stock( quantite_stock);
         } else {
-            System.out.println("Stock insuffisant pour " + nom);
+            System.out.println("Stock insuffisant pour " + getMarque());
         }
     }
 
     // Méthode pour afficher les détails du produit
     public void afficherDetails() {
-        System.out.println("ID: " + id);
-        System.out.println("Nom: " + nom);
-        System.out.println("Prix: " + prix + " €");
-        System.out.println("Description: " + description);
-        System.out.println("Stock disponible: " + stock);
+        System.out.println("ID: " + getId());
+        System.out.println("marque: " + getMarque());
+        System.out.println("modele: " + getModele());
+        System.out.println("Prix: " + getPrix() + " €");
+        System.out.println("type: " + getType());
+        System.out.println("Description: " + getDescription());
+        System.out.println("Stock disponible: " + getQuantite_stock());
     }
 }

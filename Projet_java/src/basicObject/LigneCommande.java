@@ -37,7 +37,7 @@ public class LigneCommande {
 
     // Méthode pour afficher les détails de la ligne de commande
     public void afficherDetails() {
-        System.out.println("Produit: " + produit.getNom());
+        System.out.println("Produit: " + produit.getMarque());
         System.out.println("Quantité: " + quantite);
         System.out.println("Prix Unitaire: " + getPrixUnitaire());
         System.out.println("Prix Total: " + getPrixTotal());

@@ -83,7 +83,7 @@ public class Commande {
         System.out.println("État de la Commande: " + etat);
         System.out.println("Produits Commandés:");
         for (LigneCommande ligne : lignes) {
-            System.out.println(" - " + ligne.getProduit().getNom() + ": " + ligne.getQuantite() + " à " + ligne.getPrixUnitaire() + " chacun");
+            System.out.println(" - " + ligne.getProduit().getMarque() + ": " + ligne.getQuantite() + " à " + ligne.getPrixUnitaire() + " chacun");
         }
         System.out.println("Total de la Commande: " + total);
     }
