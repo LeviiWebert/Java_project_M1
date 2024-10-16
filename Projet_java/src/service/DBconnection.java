@@ -1,11 +1,11 @@
-package dataBase;
+package service;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBconnection { 
     private static final String URL = "jdbc:mysql://localhost:3306/bd_java";
     private static final String USER = "root";
-    private static final String PASSWORD = "yoo";
+    private static final String PASSWORD = "";
 
     public static java.sql.Connection getConnection() {
         try {

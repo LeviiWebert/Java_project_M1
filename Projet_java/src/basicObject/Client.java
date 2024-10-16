@@ -1,6 +1,6 @@
 package basicObject;
 
-import dataBase.DBToclient;
+import DBTo.DBToclient;
 
 public class Client {
 	

@@ -1,4 +1,4 @@
-package dataBase;
+package toDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import basicObject.LigneCommande;
 import basicObject.Commande;
 import basicObject.Produit;
+import service.DBconnection;
 
 public class LigneCommandeToDB {
 

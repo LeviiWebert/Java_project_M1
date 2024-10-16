@@ -2,8 +2,11 @@ package main;
 
 import java.time.LocalDate;
 import basicObject.*;
-import dataBase.*;
-import service.DateBDD;
+import service.*;
+import toDB.ClientToDB;
+import toDB.CommandeToDB;
+import toDB.FactureToDB;
+import toDB.ProduitToDB;
 
 public class Main {
     public static void main(String[] args) {
@@ -14,8 +17,7 @@ public class Main {
         ClientToDB.addCustomer(client);
 
         // Création d'un produit
-        Produit produit = new Produit(1, "Laptop", 999.99, "A high-performance laptop", 10);
-
+        Produit produit = new Produit(1, "Laptop","", 999.99,"test", "A high-performance laptop", 10);
         // Ajout du produit à la base de données
         ProduitToDB.addProduit(produit);
 

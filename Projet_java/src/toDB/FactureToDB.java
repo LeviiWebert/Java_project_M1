@@ -1,10 +1,11 @@
-package dataBase;
+package toDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import basicObject.Facture;
+import service.DBconnection;
 import basicObject.Commande;
 
 public class FactureToDB {

@@ -1,6 +1,7 @@
-package dataBase;
+package toDB;
 
 import java.sql.Connection;
+import service.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,10 +19,10 @@ public class ProduitToDB {
                 System.out.println("Connexion réussie !");
 
                 preparedStatement.setInt(1, produit.getId());
-                preparedStatement.setString(2, produit.getNom());
+               // preparedStatement.setString(2, produit.getNom());
                 preparedStatement.setDouble(3, produit.getPrix());
                 preparedStatement.setString(4, produit.getDescription());
-                preparedStatement.setInt(5, produit.getStock());
+               // preparedStatement.setInt(5, produit.getStock());
 
                 int affectedRows = preparedStatement.executeUpdate();
 
@@ -63,3 +64,6 @@ public class ProduitToDB {
         }
     }
 }
+
+
+

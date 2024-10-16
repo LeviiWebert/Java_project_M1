@@ -1,7 +1,7 @@
 package basicObject;
 
-import dataBase.DBToclient;
-import dataBase.DBToproduit;
+import DBTo.DBToclient;
+import DBTo.DBToproduit;
 
 public class Produit {
 	

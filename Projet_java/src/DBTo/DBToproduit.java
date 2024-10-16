@@ -1,4 +1,4 @@
-package dataBase;
+package DBTo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +9,7 @@ import java.util.List;
 
 import basicObject.Client;
 import basicObject.Produit;
+import service.DBconnection;
 
 public class DBToproduit {
 	

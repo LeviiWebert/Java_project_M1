@@ -1,4 +1,4 @@
-package dataBase;
+package toDB;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import basicObject.Panier;
+import service.DBconnection;
 import basicObject.LigneCommande;
 
 public class PanierToDB {
