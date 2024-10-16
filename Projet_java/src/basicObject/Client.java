@@ -1,5 +1,7 @@
 package basicObject;
 
+import dataBase.DBToclient;
+
 public class Client {
 	
 	private int clientID;
@@ -13,19 +15,19 @@ public class Client {
 
 	
 	public Client(){
-		this.clientID = 0;  //relation avec la base de donnes
+		this.clientID = DBToclient.getMaxClientID() + 1;		
 	}
-	
 	
 	public Client(String date_naissance,String nom,String prenom,String email,String telephone,String adresse){
 		
-		this.clientID = 0;  // relation avec la base de donnes
+		this.clientID = DBToclient.getMaxClientID() + 1;   // relation avec la base de donnes
 		this.date_naissance = date_naissance;
 		this.email = email;
 		this.nom = nom;
 		this.prenom = prenom;
 		this.telephone = telephone;
 		this.adresse = adresse;
+		
 	}
 	
 	public Client(String date_naissance,String nom,String prenom,String email,String telephone,int clientID,String adresse){
