@@ -6,7 +6,7 @@ public class DBConnection {
     private static final String URL = "jdbc:mysql://localhost/project_java_db";
     private static final String USER = "root";
     private static final String PASSWORD = "yoo";
-
+    int a =0;
     public static java.sql.Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);
