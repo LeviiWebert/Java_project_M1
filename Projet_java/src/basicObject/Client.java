@@ -103,6 +103,11 @@ public class Client {
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
+
+
+	public void setClientID(int id) {
+		this.clientID= id;
+	}
 	
 
 }
