@@ -9,7 +9,7 @@ import basicObject.Produit;
 public class ProduitToDB {
 
     public static void addProduit(Produit produit) {
-        String query = "INSERT INTO produit (id, nom, prix, description, stock) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO produit (id, marque, modele ,prix, description, quantite_stock) VALUES (?, ?, ?, ?, ?,?)";
         
         try (Connection connection = DBconnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -18,10 +18,11 @@ public class ProduitToDB {
                 System.out.println("Connexion réussie !");
 
                 preparedStatement.setInt(1, produit.getId());
-                preparedStatement.setString(2, produit.getNom());
-                preparedStatement.setDouble(3, produit.getPrix());
-                preparedStatement.setString(4, produit.getDescription());
-                preparedStatement.setInt(5, produit.getStock());
+                preparedStatement.setString(2, produit.getMarque());
+                preparedStatement.setString(3, produit.getModele());
+                preparedStatement.setDouble(4, produit.getPrix());
+                preparedStatement.setString(5, produit.getDescription());
+                preparedStatement.setInt(5, produit.getQuantite_stock());
 
                 int affectedRows = preparedStatement.executeUpdate();
 
