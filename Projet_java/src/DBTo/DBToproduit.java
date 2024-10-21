@@ -67,16 +67,49 @@ public class DBToproduit {
         return produit;
     }
     
+    public static Produit getProduitByid(int produitId) {
+        Produit produit = null;
+
+        try (Connection connection = DBconnection.getConnection()) {
+            String query = "SELECT * FROM produit WHERE id = ?";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+                preparedStatement.setInt(1, produitId);
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        // Récupération des informations du produit
+                        String marque = resultSet.getString("marque");
+                        String modele = resultSet.getString("modele");
+                        double prix = resultSet.getDouble("prix");
+                        String type = resultSet.getString("type");
+                        String description = resultSet.getString("description");
+                        int quantiteStock = resultSet.getInt("quantite_stock");
+
+                        // Création d'une instance de Produit
+                        produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // Gestion des erreurs SQL
+        }
+
+        return produit;  // Retourne le produit ou null si aucun produit n'a été trouvé
+    }
+
+    
     
     public static void  main(String [] args){
     	
     	int maxproduitID = DBToproduit.getMaxProduitID();
         System.out.println("Le prduit ID maximum est : " + maxproduitID);
     	
+        
+        Produit p = DBToproduit.getProduitByid(maxproduitID);
+        p.afficherDetails();
     	
-//    	 List<Produit> produits = DBToproduit.getproduit();
-//
-// 	    //Vérification s'il y a des clients dans la liste
+    	//List<Produit> produits = DBToproduit.getproduit();
+
+ 	    //Vérification s'il y a des clients dans la liste
 // 	    if (produits.isEmpty()) {
 // 	        System.out.println("Aucun client trouvé.");
 // 	    } else {
@@ -86,7 +119,7 @@ public class DBToproduit {
 // 	            System.out.println("ID produit : " + produit.getId());
 // 	            System.out.println("marque : " + produit.getMarque());
 // 	            System.out.println("modele : " + produit.getModele());
-// 	            System.out.println("prix : " + produit.getPrix());
+// 	            System.out.println("prix : " + produit.getPrix() +" € ");
 // 	            System.out.println("type : " + produit.getType());
 // 	            System.out.println("description : " + produit.getDescription());
 // 	            System.out.println("quantite_stock : " + produit.getDescription());
@@ -94,7 +127,7 @@ public class DBToproduit {
 // 	            
 // 	        }
 // 	    }
-//    	
+    	
     	
     	
     }

@@ -3,17 +3,21 @@ package basicObject;
 
 public class LigneCommande {
 	
+	private int id;
     private Commande commande;     
     private Produit produit;        
-    private int quantite;  
+    private int quantite; 
     
     
 
     public LigneCommande(Commande commande, Produit produit, int quantite) {
+    	this.id = id; //relation avec la base de donnes
         this.commande = commande; 
         this.produit = produit;    
         this.quantite = quantite;  
     }
+    
+//    public LigneCommande(int produitId, int quantite2, double prixUnitaire) {}
 
     public Commande getCommande() {
         return commande;          
@@ -42,4 +46,18 @@ public class LigneCommande {
         System.out.println("Prix Unitaire: " + getPrixUnitaire());
         System.out.println("Prix Total: " + getPrixTotal());
     }
+    
+    @Override
+    public String toString() {
+    	
+    	StringBuffer sb = new StringBuffer();
+        
+        sb.append("Produit: ").append(produit.getMarque()).append("\n");
+        sb.append("Quantité: ").append(quantite).append("\n");
+        sb.append("Prix Unitaire: ").append(getPrixUnitaire()).append("\n");
+        sb.append("Prix Total: ").append(getPrixTotal()).append("\n");
+        
+        return sb.toString(); 
+    }
+
 }

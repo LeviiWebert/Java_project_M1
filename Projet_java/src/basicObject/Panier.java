@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Panier {
-    private int clientId;                          // Identifiant du client
-    private List<LigneCommande> lignes;            // Liste des lignes de commande (produits ajoutés)
+	
+	private int id;
+    private int clientId;                          //Identifiant du client
+    private List<LigneCommande> lignes;            //Liste des lignes de commande (produits ajoutés)
     private double total;                           // Montant total du panier
 
     // Constructeur
     public Panier(int clientId) {
     	
-        this.clientId = clientId;                   // Initialisation de l'identifiant du client
-        this.lignes = new ArrayList<>();            // Initialisation de la liste des lignes de commande
-        this.total = 0.0;                           // Initialisation du total
+        this.clientId = clientId;                   //Initialisation de l'identifiant du client
+        this.lignes = new ArrayList<>();            //Initialisation de la liste des lignes de commande
+        this.total = 0.0;                           //Initialisation du total
     }
 
     // Méthode pour ajouter un produit au panier

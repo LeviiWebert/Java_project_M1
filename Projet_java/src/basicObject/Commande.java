@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import DBTo.DBToclient;
+import DBTo.DBTocommande;
+
 
 public class Commande {
 	
@@ -11,17 +14,53 @@ public class Commande {
     private int clientId;          // Identifiant du client ayant passé la commande
     private Date dateCommande;     // Date à laquelle la commande a été passée
     private String etat;           // État de la commande (en_cours, validée, livrée)
-    private List<LigneCommande> lignes;  // Liste des lignes de commande (produits commandés)
-    private double total;          // Montant total de la commande
+    private List<LigneCommande>lignes; //Liste des lignes de commande (produits commandés)
+    private double total;         // Montant total de la commande
 
-    // Constructeur
+    
+    // Constructeur modifié
+    
     public Commande(int clientId) {
     	
+    	this.id  = DBTocommande.getMaxIdCommande() + 1;
         this.clientId = clientId;
-        this.dateCommande = new Date(); // Date actuelle
+        this.dateCommande = new Date();  // Date actuelle
         this.etat = "en_cours";          // État initial
         this.lignes = new ArrayList<>(); // Initialiser la liste des lignes de commande
-        this.total = 0.0;                // Montant total initial
+        this.total =  calculerTotal();   // Montant total
+    }
+    
+    
+    public Commande(int clientId, Date dateCommande, String etat, List<LigneCommande> lignes) {
+    	
+    	this.id  = DBTocommande.getMaxIdCommande() + 1;
+        this.clientId = clientId;
+        this.dateCommande = (dateCommande != null) ? dateCommande : new Date(); // Date actuelle par défaut si non fournie
+        this.etat = (etat != null && !etat.isEmpty()) ? etat : "en_cours"; // État par défaut "en_cours" si non fourni
+        this.lignes = (lignes != null) ? lignes : new ArrayList<>();  // Initialiser la liste des lignes, vide si null
+        this.total = calculerTotal();  // Calculer automatiquement le total en fonction des lignes de commande
+        
+    }
+    
+    public Commande(int id,int clientId, Date dateCommande, String etat, List<LigneCommande> lignes,double total) {
+    	
+    	this.id  = id;
+        this.clientId = clientId;
+        this.dateCommande = (dateCommande != null) ? dateCommande : new Date(); // Date actuelle par défaut si non fournie
+        this.etat = (etat != null && !etat.isEmpty()) ? etat : "en_cours"; // État par défaut "en_cours" si non fourni
+        this.lignes = (lignes != null) ? lignes : new ArrayList<>();  // Initialiser la liste des lignes, vide si null
+        this.total = calculerTotal();  // Calculer automatiquement le total en fonction des lignes de commande
+        this.total = total;
+    }
+
+
+    // Méthode pour calculer le total de la commande
+    private double calculerTotal() {
+        double somme = 0.0;
+        for (LigneCommande ligne : lignes) {
+            somme += ligne.getPrixUnitaire() * ligne.getQuantite();
+        }
+        return somme;
     }
 
     // Méthode pour ajouter un produit à la commande
@@ -86,5 +125,26 @@ public class Commande {
             System.out.println(" - " + ligne.getProduit().getMarque() + ": " + ligne.getQuantite() + " à " + ligne.getPrixUnitaire() + " chacun");
         }
         System.out.println("Total de la Commande: " + total);
+    }
+    
+    public String toString() {
+		StringBuffer sb  = new StringBuffer();
+		
+        sb.append("Commande ID: ").append(id).append("\n");
+        sb.append("Client ID: ").append(clientId).append("\n");
+        sb.append("Date de Commande: ").append(dateCommande).append("\n");
+        sb.append("État de la Commande: ").append(etat).append("\n");
+        sb.append("Produits Commandés:\n");
+        
+        for (LigneCommande ligne : lignes) {
+            sb.append(" - ").append(ligne.getProduit().getMarque())
+              .append(": ").append(ligne.getQuantite())
+              .append(" à ").append(ligne.getPrixUnitaire())
+              .append(" chacun\n");
+        }
+        
+        sb.append("Total de la Commande: ").append(total).append("\n");
+        
+        return sb.toString(); // Retourne la chaîne de caractères complète
     }
 }

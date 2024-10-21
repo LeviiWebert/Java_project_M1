@@ -4,6 +4,38 @@ import java.time.LocalDate;
 
 public class Facture {
 	
+   
+
+	private int id;                       // Identifiant unique de la facture
+    private Commande commande;            // Référence à la commande associée
+    private LocalDate dateFacture;        // Date à laquelle la facture a été générée
+    private double montant;                // Montant total de la facture
+
+    // Constructeur
+    public Facture(int id, Commande commande) {
+        this.id = id;                           // Initialisation de l'identifiant
+        this.commande = commande;               // Référence à la commande
+        this.dateFacture = LocalDate.now();     // Date actuelle
+        this.montant = calculerMontant();       // Calculer le montant total de la commande
+    }
+    
+    public Facture(int id, Commande commande,LocalDate dateFacture,double montant) {
+        this.id = id;                           // Initialisation de l'identifiant
+        this.commande = commande;               // Référence à la commande
+        this.dateFacture = dateFacture;    // Date actuelle
+        this.montant = montant;            // Calculer le montant total de la commande
+    }
+
+    // Méthode pour calculer le montant total de la commande
+    private double calculerMontant() {
+        double total = 0.0;
+        for (LigneCommande ligne : commande.getLignes()) {
+            total += ligne.getPrixTotal();       // Somme des prix de chaque ligne
+        }
+        return total;                             // Retourner le montant total
+    }
+
+    // Getters
     public void setId(int id) {
 		this.id = id;
 	}
@@ -19,30 +51,7 @@ public class Facture {
 	public void setMontant(double montant) {
 		this.montant = montant;
 	}
-
-	private int id;                       // Identifiant unique de la facture
-    private Commande commande;            // Référence à la commande associée
-    private LocalDate dateFacture;        // Date à laquelle la facture a été générée
-    private double montant;                // Montant total de la facture
-
-    // Constructeur
-    public Facture(int id, Commande commande) {
-        this.id = id;                           // Initialisation de l'identifiant
-        this.commande = commande;               // Référence à la commande
-        this.dateFacture = LocalDate.now();     // Date actuelle
-        this.montant = calculerMontant();       // Calculer le montant total de la commande
-    }
-
-    // Méthode pour calculer le montant total de la commande
-    private double calculerMontant() {
-        double total = 0.0;
-        for (LigneCommande ligne : commande.getLignes()) {
-            total += ligne.getPrixTotal();       // Somme des prix de chaque ligne
-        }
-        return total;                             // Retourner le montant total
-    }
-
-    // Getters
+	
     public int getId() {
         return id;                             // Retourne l'identifiant de la facture
     }

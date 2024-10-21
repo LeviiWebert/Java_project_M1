@@ -119,6 +119,8 @@ public class Produit {
 
     // Méthode pour afficher les détails du produit
     public void afficherDetails() {
+    	System.out.println("----------------------------------");
+    	System.out.println("Produit : ");
         System.out.println("ID: " + getId());
         System.out.println("marque: " + getMarque());
         System.out.println("modele: " + getModele());
@@ -126,5 +128,24 @@ public class Produit {
         System.out.println("type: " + getType());
         System.out.println("Description: " + getDescription());
         System.out.println("Stock disponible: " + getQuantite_stock());
+        System.out.println("----------------------------------");
+    }
+    
+    @Override
+    public String toString() {
+        StringBuffer details = new StringBuffer();
+        
+        details.append("----------------------------------\n");
+        details.append("Produit : \n");
+        details.append("ID: ").append(getId()).append("\n");
+        details.append("Marque: ").append(getMarque()).append("\n");
+        details.append("Modèle: ").append(getModele()).append("\n");
+        details.append("Prix: ").append(getPrix()).append(" €\n");
+        details.append("Type: ").append(getType()).append("\n");
+        details.append("Description: ").append(getDescription()).append("\n");
+        details.append("Stock disponible: ").append(getQuantite_stock()).append("\n");
+        details.append("----------------------------------");
+        
+        return details.toString();
     }
 }

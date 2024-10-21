@@ -77,25 +77,25 @@ public class DBToclient {
 	    System.out.println("Le client ID maximum est : " + maxClientID);
 	    
 	    
-	    //Appel de la méthode getClients() pour obtenir la liste des clients
-	    List<Client> clients = DBToclient.getClients();
-
-	    //Vérification s'il y a des clients dans la liste
-	    if (clients.isEmpty()) {
-	        System.out.println("Aucun client trouvé.");
-	    } else {
-	        // Parcourir et afficher les informations de chaque client
-	        for (Client client : clients) {
-	            System.out.println("Client ID : " + client.getClientID());
-	            System.out.println("Nom : " + client.getNom());
-	            System.out.println("Prénom : " + client.getPrenom());
-	            System.out.println("Email : " + client.getEmail());
-	            System.out.println("Téléphone : " + client.getTelephone());
-	            System.out.println("Adresse : " + client.getAdresse());
-	            System.out.println("Date de naissance : " + client.getDate_naissance());
-	            System.out.println("-----------------------------------------");
-	        }
-	    }
+//	    //Appel de la méthode getClients() pour obtenir la liste des clients
+//	    List<Client> clients = DBToclient.getClients();
+//
+//	    //Vérification s'il y a des clients dans la liste
+//	    if (clients.isEmpty()) {
+//	        System.out.println("Aucun client trouvé.");
+//	    } else {
+//	        // Parcourir et afficher les informations de chaque client
+//	        for (Client client : clients) {
+//	            System.out.println("Client ID : " + client.getClientID());
+//	            System.out.println("Nom : " + client.getNom());
+//	            System.out.println("Prénom : " + client.getPrenom());
+//	            System.out.println("Email : " + client.getEmail());
+//	            System.out.println("Téléphone : " + client.getTelephone());
+//	            System.out.println("Adresse : " + client.getAdresse());
+//	            System.out.println("Date de naissance : " + client.getDate_naissance());
+//	            System.out.println("-----------------------------------------");
+//	        }
+//	    }
 	}
 	
 	
