@@ -6,6 +6,7 @@ import java.util.List;
 
 import DBTo.DBToclient;
 import DBTo.DBTocommande;
+import toDB.LigneCommandeToDB;
 
 
 public class Commande {
@@ -70,6 +71,7 @@ public class Commande {
         lignes.add(ligne);
         // Met à jour le total
         total += ligne.getPrixTotal(); // On suppose que la méthode getPrixTotal() existe dans LigneCommande
+        LigneCommandeToDB.addLigneCommande(ligne);
     }
 
     // Méthode pour valider la commande
