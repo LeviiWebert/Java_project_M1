@@ -7,9 +7,12 @@ import toDB.ClientToDB;
 import toDB.CommandeToDB;
 import toDB.FactureToDB;
 import toDB.ProduitToDB;
+import managementAppUI.*;
 
 public class Main {
     public static void main(String[] args) {
+    	Authentification a = new Authentification() ;
+    	a.setVisible(true);
         // Création d'un client
         Client client = new Client(new DateBDD(2002, 12, 10).getDateBDD(),"John Doe","DOe", "john.doe@example.com", "123456789","adresse");
 
