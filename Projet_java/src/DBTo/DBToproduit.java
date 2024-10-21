@@ -95,6 +95,51 @@ public class DBToproduit {
 
         return produit;  // Retourne le produit ou null si aucun produit n'a été trouvé
     }
+    
+    
+    public static List<Produit> getproduitByName(List<String> selectedProductNames) {
+        List<Produit> produitList = new ArrayList<>();
+ 
+        if (selectedProductNames == null || selectedProductNames.isEmpty()) {
+            return produitList; // retourne une liste vide si aucune sélection
+        }
+ 
+        try (Connection connection = DBconnection.getConnection()) {
+            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM produit WHERE modele IN (");
+            for (int i = 0; i < selectedProductNames.size(); i++) {
+                queryBuilder.append("?");
+                if (i < selectedProductNames.size() - 1) {
+                    queryBuilder.append(", ");
+                }
+            }
+            queryBuilder.append(")");
+ 
+            try (PreparedStatement preparedStatement = connection.prepareStatement(queryBuilder.toString())) {
+                for (int i = 0; i < selectedProductNames.size(); i++) {
+                    preparedStatement.setString(i + 1, selectedProductNames.get(i));
+                }
+ 
+                try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                    while (resultSet.next()) {
+                        int ID = resultSet.getInt("id");
+                        String marque = resultSet.getString("marque");
+                        String modele = resultSet.getString("modele");
+                        double prix = resultSet.getDouble("prix");
+                        String type = resultSet.getString("type");
+                        String description = resultSet.getString("description");
+                        int quantite_stock = resultSet.getInt("quantite_stock");
+ 
+                        Produit produit = new Produit(ID, marque, modele, prix, type, description, quantite_stock);
+                        produitList.add(produit);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+ 
+        return produitList;
+    }
 
     
     

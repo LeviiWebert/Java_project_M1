@@ -10,7 +10,7 @@ import service.DBconnection;
 public class CommandeToDB {
 
     public static void addCommande(Commande commande) {
-        String query = "INSERT INTO commande (client_id, dateCommande, etat, total) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO commande (client_id, date_commande, statut, total_commande) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBconnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 

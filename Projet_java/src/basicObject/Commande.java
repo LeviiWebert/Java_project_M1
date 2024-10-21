@@ -114,7 +114,27 @@ public class Commande {
         return total;
     }
 
-    // Méthode pour afficher les détails de la commande
+    public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
+	public void setDateCommande(Date dateCommande) {
+		this.dateCommande = dateCommande;
+	}
+
+	public void setEtat(String etat) {
+		this.etat = etat;
+	}
+
+	public void setLignes(List<LigneCommande> lignes) {
+		this.lignes = lignes;
+	}
+
+	public void setTotal(double total) {
+		this.total = total;
+	}
+
+	// Méthode pour afficher les détails de la commande
     public void afficherDetails() {
         System.out.println("Commande ID: " + id);
         System.out.println("Client ID: " + clientId);
