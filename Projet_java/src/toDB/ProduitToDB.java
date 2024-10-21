@@ -23,7 +23,7 @@ public class ProduitToDB {
                 preparedStatement.setString(3, produit.getModele());
                 preparedStatement.setDouble(4, produit.getPrix());
                 preparedStatement.setString(5, produit.getDescription());
-                preparedStatement.setInt(5, produit.getQuantite_stock());
+                preparedStatement.setInt(6, produit.getQuantite_stock());
 
                 int affectedRows = preparedStatement.executeUpdate();
 

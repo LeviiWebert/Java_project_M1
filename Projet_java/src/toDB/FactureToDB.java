@@ -11,7 +11,7 @@ import basicObject.Commande;
 public class FactureToDB {
 
     public static void addFacture(Facture facture) {
-        String query = "INSERT INTO facture (commandeID, dateFacture, montant) VALUES (?, ?, ?)";
+        String query = "INSERT INTO facture (commande_id, date_facture, montant) VALUES (?, ?, ?)";
         try (Connection connection = DBconnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
