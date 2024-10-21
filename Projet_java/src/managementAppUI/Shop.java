@@ -1,16 +1,15 @@
 package managementAppUI;
 
+import basicObject.Client;
+import basicObject.Commande;
 import basicObject.Produit;
-import service.DBconnection; // Assure-toi d'importer ta classe de connexion à la base de données
+import DBTo.DBToproduit;
+import DBTo.DBToclient;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Shop extends JFrame {
@@ -18,9 +17,12 @@ public class Shop extends JFrame {
     private DefaultListModel<String> listModel;
     private JList<String> productList;
     private JTextField searchField;
+    private int client_id;
 
-    public Shop() {
-        my_product = getproduit();
+    public Shop(int client_id) {
+        this.client_id = client_id;
+        my_product = DBToproduit.getproduit();
+        Client client = (Client) DBToclient.getClientByID(client_id);
 
         setTitle("Shop");
         setSize(1000, 700);
@@ -61,39 +63,24 @@ public class Shop extends JFrame {
             }
         });
 
+        // Create the orders button
+        JButton ordersButton = new JButton("View Orders");
+        ordersButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewOrders();
+            }
+        });
+
+        // Create a panel to hold the order and orders buttons
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(orderButton);
+        buttonPanel.add(ordersButton);
+
         // Add components to the frame
         add(searchPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
-        add(orderButton, BorderLayout.SOUTH);
-    }
-
-    // Fetch all products from the database
-    public static List<Produit> getproduit() {
-        List<Produit> produit = new ArrayList<>();
-
-        try (Connection connection = DBconnection.getConnection()) {
-            String query = "SELECT * FROM produit";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query);
-                 ResultSet resultSet = preparedStatement.executeQuery()) {
-
-                while (resultSet.next()) {
-                    int ID = resultSet.getInt("id");
-                    String marque = resultSet.getString("marque");
-                    String modele = resultSet.getString("modele");
-                    double prix = resultSet.getDouble("prix");
-                    String type = resultSet.getString("type");
-                    String description = resultSet.getString("description");
-                    int quantite_stock = resultSet.getInt("quantite_stock");
-
-                    Produit prduit = new Produit(ID, marque, modele, prix, type, description, quantite_stock);
-                    produit.add(prduit);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return produit;
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     // Search products based on the search field input
@@ -109,21 +96,44 @@ public class Shop extends JFrame {
 
     // Order selected products
     private void orderProducts() {
-        List<String> selectedProducts = productList.getSelectedValuesList();
-        if (selectedProducts.isEmpty()) {
+        List<String> selectedProductNames = productList.getSelectedValuesList();
+        List<Produit> selectedProducts = DBToproduit.getproduitByName(selectedProductNames);
+
+        if (selectedProductNames.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No products selected.");
         } else {
+            Commande commande = new Commande(client_id);
+            for (Produit produit : selectedProducts) {
+                commande.ajouterProduit(produit, client_id);
+            }
             StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
-            for (String productName : selectedProducts) {
+            for (String productName : selectedProductNames) {
                 orderSummary.append(productName).append("\n");
             }
             JOptionPane.showMessageDialog(this, orderSummary.toString());
         }
     }
 
+    // View orders and their status
+    private void viewOrders() {
+        List<Commande> commandes = DBToclient.getCommandesByClientID(client_id);
+        if (commandes.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No orders found.");
+        } else {
+            StringBuilder ordersSummary = new StringBuilder("Your orders:\n");
+            for (Commande commande : commandes) {
+                ordersSummary.append("Order ID: ").append(commande.getId())
+                        .append(", Date: ").append(commande.getDateCommande())
+                        .append(", Status: ").append(commande.getEtat())
+                        .append("\n");
+            }
+            JOptionPane.showMessageDialog(this, ordersSummary.toString());
+        }
+    }
+
     public static void main(String[] args) {
         // Create and show the shop
-        Shop shop = new Shop();
+        Shop shop = new Shop(1); // Assuming client_id is 1 for testing
         shop.setVisible(true);
     }
 }
