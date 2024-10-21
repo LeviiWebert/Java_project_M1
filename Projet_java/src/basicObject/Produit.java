@@ -19,7 +19,7 @@ public class Produit {
     }
     
     
-    public Produit(int id, String marque, String modele, double prix2, String type,String description,int quantite_stock) {
+    public Produit(int id, String marque, String modele, double prix2, String type,String description,int quantite_stock){
     	
         this.id = id;
         this.marque = marque ;
@@ -119,6 +119,7 @@ public class Produit {
 
     // Méthode pour afficher les détails du produit
     public void afficherDetails() {
+    	
     	System.out.println("----------------------------------");
     	System.out.println("Produit : ");
         System.out.println("ID: " + getId());
@@ -129,6 +130,7 @@ public class Produit {
         System.out.println("Description: " + getDescription());
         System.out.println("Stock disponible: " + getQuantite_stock());
         System.out.println("----------------------------------");
+        
     }
     
     @Override
