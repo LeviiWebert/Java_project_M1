@@ -25,7 +25,7 @@ public class Commande {
     	this.id  = DBTocommande.getMaxIdCommande() + 1;
         this.clientId = clientId;
         this.dateCommande = new Date();  // Date actuelle
-        this.etat = "en_cours";          // État initial
+        this.etat = "en cours";          // État initial
         this.lignes = new ArrayList<>(); // Initialiser la liste des lignes de commande
         this.total =  calculerTotal();   // Montant total
     }

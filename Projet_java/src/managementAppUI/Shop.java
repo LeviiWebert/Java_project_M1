@@ -3,6 +3,7 @@ package managementAppUI;
 import basicObject.Client;
 import basicObject.Commande;
 import basicObject.Produit;
+import toDB.CommandeToDB;
 import DBTo.DBToproduit;
 import DBTo.DBToclient;
 
@@ -106,6 +107,7 @@ public class Shop extends JFrame {
             for (Produit produit : selectedProducts) {
                 commande.ajouterProduit(produit, client_id);
             }
+            CommandeToDB.addCommande(commande);
             StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
             for (String productName : selectedProductNames) {
                 orderSummary.append(productName).append("\n");

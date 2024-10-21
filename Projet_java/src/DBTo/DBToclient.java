@@ -113,8 +113,8 @@ public class DBToclient {
 	                // Récupérer les données de chaque colonne
 	                int id = resultSet.getInt("id");  // Identifiant unique de la commande
 	                Date dateCommande = resultSet.getDate("date_commande");  // Date à laquelle la commande a été passée
-	                String etat = resultSet.getString("etat");  // État de la commande (en_cours, validée, livrée)
-	                double total = resultSet.getDouble("total");  // Montant total de la commande
+	                String etat = resultSet.getString("statut");  // État de la commande (en_cours, validée, livrée)
+	                double total = resultSet.getDouble("total_commande");  // Montant total de la commande
 
 	                // Créer une nouvelle instance de Commande et l'ajouter à la liste
 	                Commande commande = new Commande(clientID);
