@@ -11,7 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Shop extends JFrame {
     private List<Produit> my_product;
@@ -77,6 +79,19 @@ public class Shop extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(orderButton);
         buttonPanel.add(ordersButton);
+        
+     // Create the back button
+        JButton backButton = new JButton("Back to Accueil");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backToAccueil();
+            }
+        });
+
+        // Add the back button to the button panel
+        buttonPanel.add(backButton);
+
 
         // Add components to the frame
         add(searchPanel, BorderLayout.NORTH);
@@ -95,26 +110,6 @@ public class Shop extends JFrame {
         }
     }
 
-    // Order selected products
-//    private void orderProducts() {
-//        List<String> selectedProductNames = productList.getSelectedValuesList();
-//        List<Produit> selectedProducts = DBToproduit.getproduitByName(selectedProductNames);
-//
-//        if (selectedProductNames.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "No products selected.");
-//        } else {
-//            Commande commande = new Commande(client_id);
-//            for (Produit produit : selectedProducts) {
-//                commande.ajouterProduit(produit, client_id);
-//            }
-//            CommandeToDB.addCommande(commande);
-//            StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
-//            for (String productName : selectedProductNames) {
-//                orderSummary.append(productName).append("\n");
-//            }
-//            JOptionPane.showMessageDialog(this, orderSummary.toString());
-//        }
-//    }
     private void orderProducts() {
         List<String> selectedProductModeles = productList.getSelectedValuesList();
         List<Produit> selectedProducts = DBToproduit.getproduitByModele(selectedProductModeles);
@@ -127,37 +122,72 @@ public class Shop extends JFrame {
         
         Commande commande = new Commande(client_id);
         
-        for (Produit produit : selectedProducts) {
-            // Demander à l'utilisateur la quantité pour chaque produit
-            String quantityStr = JOptionPane.showInputDialog(this, "Enter quantity for " + produit.getMarque() + " " + produit.getModele() + ":");
-            
-            // Vérifier si l'utilisateur a annulé la saisie ou si l'entrée est vide
-            if (quantityStr == null || quantityStr.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Quantity for " + produit.getMarque() + " " + produit.getModele() + " not entered. Skipping this product.");
-                continue;  // Passer au produit suivant
-            }
+        JDialog dialog = new JDialog(this, "Adjust Quantities", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(this);
 
-            // Convertir la chaîne de caractères en entier
-            int quantite;
-            try {
-                quantite = Integer.parseInt(quantityStr);
-                if (quantite <= 0) {
-                    JOptionPane.showMessageDialog(this, "Please enter a valid quantity greater than 0.");
-                    continue;  // Passer au produit suivant
+        Map<Produit, Integer> productQuantities = new HashMap<>();
+        JPanel productsPanel = new JPanel(new GridLayout(selectedProducts.size(), 1));
+
+        for (Produit product : selectedProducts) {
+            productQuantities.put(product, 0);  // Initialize quantity to 0
+
+            JPanel productPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            JLabel nameLabel = new JLabel(product.getMarque() + " " + product.getModele());
+            JButton minusButton = new JButton("-");
+            JLabel quantityLabel = new JLabel("0");
+            JButton plusButton = new JButton("+");
+
+            minusButton.addActionListener(e -> {
+                int quantity = productQuantities.get(product);
+                if (quantity > 0) {
+                    productQuantities.put(product, --quantity);
+                    quantityLabel.setText(String.valueOf(quantity));
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Invalid quantity entered. Please enter a valid number.");
-                continue;  // Passer au produit suivant
+            });
+
+            plusButton.addActionListener(e -> {
+                int quantity = productQuantities.get(product);
+                productQuantities.put(product, ++quantity);
+                quantityLabel.setText(String.valueOf(quantity));
+            });
+
+            productPanel.add(nameLabel);
+            productPanel.add(minusButton);
+            productPanel.add(quantityLabel);
+            productPanel.add(plusButton);
+
+            productsPanel.add(productPanel);
+        }
+
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(e -> {
+            for (Produit product : selectedProducts) {
+                int quantity = productQuantities.get(product);
+                if (quantity > 0) {
+                    commande.ajouterProduit(product, quantity);
+                    System.out.print("Produit ajouté avec succès à la commande");                
+                }
             }
 
-            // Ajouter le produit avec la quantité à la commande
-            commande.ajouterProduit(produit, quantite);
-        }
+            if (commande.getLignes().size() > 0) {
+                CommandeToDB.addCommande(commande);
+                JOptionPane.showMessageDialog(this, "Order placed successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "No quantities selected.");
+            }
 
-        // Enregistrer la commande dans la base de données
-        if (commande.getLignes().size() > 0) { // Assurez-vous qu'il y a des lignes de commande
-            CommandeToDB.addCommande(commande); // Ajoutez ici l'appel à la méthode pour enregistrer la commande
-        }
+            dialog.dispose();
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(confirmButton);
+
+        dialog.add(new JScrollPane(productsPanel), BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        dialog.setVisible(true);
+
 
         // Affichage du récapitulatif de la commande
         StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
@@ -168,23 +198,18 @@ public class Shop extends JFrame {
     }
 
 
-    // View orders and their status
     private void viewOrders() {
-        List<Commande> commandes = DBToclient.getCommandesByClientID(client_id);
-        if (commandes.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No orders found.");
-        } else {
-            StringBuilder ordersSummary = new StringBuilder("Your orders:\n");
-            for (Commande commande : commandes) {
-                ordersSummary.append("Order ID: ").append(commande.getId())
-                        .append(", Date: ").append(commande.getDateCommande())
-                        .append(", Status: ").append(commande.getEtat())
-                        .append("\n");
-            }
-            JOptionPane.showMessageDialog(this, ordersSummary.toString());
-        }
+        AccueilClient accueilClient = new AccueilClient(client_id);
+        accueilClient.setVisible(true);
+        this.dispose();
     }
 
+    // Back to AccueilClient
+    private void backToAccueil() {
+        AccueilClient accueilClient = new AccueilClient(client_id);
+        accueilClient.setVisible(true);
+        this.dispose();
+    }
     public static void main(String[] args) {
         // Create and show the shop
         Shop shop = new Shop(1); // Assuming client_id is 1 for testing
