@@ -34,7 +34,7 @@ public class Shop extends JFrame {
         // Create the list model and populate it with product names
         listModel = new DefaultListModel<>();
         for (Produit product : my_product) {
-            listModel.addElement(product.getMarque() + " " + product.getModele());
+            listModel.addElement(product.getModele());
         }
 
         // Create the product list and add it to a scroll pane
@@ -90,31 +90,83 @@ public class Shop extends JFrame {
         listModel.clear();
         for (Produit product : my_product) {
             if (product.getMarque().toLowerCase().contains(searchTerm) || product.getModele().toLowerCase().contains(searchTerm)) {
-                listModel.addElement(product.getMarque() + " " + product.getModele());
+                listModel.addElement(product.getModele());
             }
         }
     }
 
     // Order selected products
+//    private void orderProducts() {
+//        List<String> selectedProductNames = productList.getSelectedValuesList();
+//        List<Produit> selectedProducts = DBToproduit.getproduitByName(selectedProductNames);
+//
+//        if (selectedProductNames.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "No products selected.");
+//        } else {
+//            Commande commande = new Commande(client_id);
+//            for (Produit produit : selectedProducts) {
+//                commande.ajouterProduit(produit, client_id);
+//            }
+//            CommandeToDB.addCommande(commande);
+//            StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
+//            for (String productName : selectedProductNames) {
+//                orderSummary.append(productName).append("\n");
+//            }
+//            JOptionPane.showMessageDialog(this, orderSummary.toString());
+//        }
+//    }
     private void orderProducts() {
-        List<String> selectedProductNames = productList.getSelectedValuesList();
-        List<Produit> selectedProducts = DBToproduit.getproduitByName(selectedProductNames);
-
-        if (selectedProductNames.isEmpty()) {
+        List<String> selectedProductModeles = productList.getSelectedValuesList();
+        List<Produit> selectedProducts = DBToproduit.getproduitByModele(selectedProductModeles);
+        
+        if (selectedProducts.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No products selected.");
-        } else {
-            Commande commande = new Commande(client_id);
-            for (Produit produit : selectedProducts) {
-                commande.ajouterProduit(produit, client_id);
-            }
-            CommandeToDB.addCommande(commande);
-            StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
-            for (String productName : selectedProductNames) {
-                orderSummary.append(productName).append("\n");
-            }
-            JOptionPane.showMessageDialog(this, orderSummary.toString());
+            return;
         }
+
+        
+        Commande commande = new Commande(client_id);
+        
+        for (Produit produit : selectedProducts) {
+            // Demander à l'utilisateur la quantité pour chaque produit
+            String quantityStr = JOptionPane.showInputDialog(this, "Enter quantity for " + produit.getMarque() + " " + produit.getModele() + ":");
+            
+            // Vérifier si l'utilisateur a annulé la saisie ou si l'entrée est vide
+            if (quantityStr == null || quantityStr.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Quantity for " + produit.getMarque() + " " + produit.getModele() + " not entered. Skipping this product.");
+                continue;  // Passer au produit suivant
+            }
+
+            // Convertir la chaîne de caractères en entier
+            int quantite;
+            try {
+                quantite = Integer.parseInt(quantityStr);
+                if (quantite <= 0) {
+                    JOptionPane.showMessageDialog(this, "Please enter a valid quantity greater than 0.");
+                    continue;  // Passer au produit suivant
+                }
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Invalid quantity entered. Please enter a valid number.");
+                continue;  // Passer au produit suivant
+            }
+
+            // Ajouter le produit avec la quantité à la commande
+            commande.ajouterProduit(produit, quantite);
+        }
+
+        // Enregistrer la commande dans la base de données
+        if (commande.getLignes().size() > 0) { // Assurez-vous qu'il y a des lignes de commande
+            CommandeToDB.addCommande(commande); // Ajoutez ici l'appel à la méthode pour enregistrer la commande
+        }
+
+        // Affichage du récapitulatif de la commande
+        StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
+        for (String productName : selectedProductModeles) {
+            orderSummary.append(productName).append("\n");
+        }
+        JOptionPane.showMessageDialog(this, orderSummary.toString());
     }
+
 
     // View orders and their status
     private void viewOrders() {

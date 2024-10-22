@@ -12,7 +12,7 @@ import service.DBconnection;
 public class LigneCommandeToDB {
 
     public static void addLigneCommande(LigneCommande ligneCommande) {
-        String query = "INSERT INTO ligne_commande (commandeID, produitID, quantite, prixUnitaire, prixTotal) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO lignecommande (commande_id, produit_id, quantite, prix_unitaire) VALUES (?, ?, ?, ?)";
         try (Connection connection = DBconnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -24,7 +24,7 @@ public class LigneCommandeToDB {
                 preparedStatement.setInt(2, ligneCommande.getProduit().getId());
                 preparedStatement.setInt(3, ligneCommande.getQuantite());
                 preparedStatement.setDouble(4, ligneCommande.getPrixUnitaire());
-                preparedStatement.setDouble(5, ligneCommande.getPrixTotal());
+
 
                 // Exécuter l'insertion
                 int affectedRows = preparedStatement.executeUpdate();
