@@ -96,50 +96,45 @@ public class DBToproduit {
         return produit;  // Retourne le produit ou null si aucun produit n'a été trouvé
     }
     
-    
-    public static List<Produit> getproduitByName(List<String> selectedProductNames) {
+//    public static List<Produit> getproduitByModele(List<String> selectedProductModele) {
+//        List<Produit> produitList = new ArrayList<>();
+//
+//        if (selectedProductModele == null || selectedProductModele.isEmpty()) {
+//            return produitList; // retourne une liste vide si aucune sélection
+//        }
+//
+//        // Supposons que vous ayez une méthode getproduit() qui renvoie tous les produits disponibles
+//        List<Produit> allProducts = getproduit();
+//
+//        for (Produit produit : allProducts) {
+//            for (String modele : selectedProductModele) {
+//                if (produit.getModele().equals(modele)) {
+//                    produitList.add(produit);
+//                }
+//            }
+//        }
+//
+//        return produitList; // Retourne la liste des produits trouvés
+//    }
+    public static List<Produit> getproduitByModele(List<String> selectedProductModele) {
         List<Produit> produitList = new ArrayList<>();
- 
-        if (selectedProductNames == null || selectedProductNames.isEmpty()) {
+
+        if (selectedProductModele == null || selectedProductModele.isEmpty()) {
             return produitList; // retourne une liste vide si aucune sélection
         }
- 
-        try (Connection connection = DBconnection.getConnection()) {
-            StringBuilder queryBuilder = new StringBuilder("SELECT * FROM produit WHERE modele IN (");
-            for (int i = 0; i < selectedProductNames.size(); i++) {
-                queryBuilder.append("?");
-                if (i < selectedProductNames.size() - 1) {
-                    queryBuilder.append(", ");
-                }
+
+        // Supposons que vous ayez une méthode getproduit() qui renvoie tous les produits disponibles
+        List<Produit> allProducts = getproduit();
+
+        for (Produit produit : allProducts) {
+            if (selectedProductModele.contains(produit.getModele())) {
+                produitList.add(produit);
             }
-            queryBuilder.append(")");
- 
-            try (PreparedStatement preparedStatement = connection.prepareStatement(queryBuilder.toString())) {
-                for (int i = 0; i < selectedProductNames.size(); i++) {
-                    preparedStatement.setString(i + 1, selectedProductNames.get(i));
-                }
- 
-                try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                    while (resultSet.next()) {
-                        int ID = resultSet.getInt("id");
-                        String marque = resultSet.getString("marque");
-                        String modele = resultSet.getString("modele");
-                        double prix = resultSet.getDouble("prix");
-                        String type = resultSet.getString("type");
-                        String description = resultSet.getString("description");
-                        int quantite_stock = resultSet.getInt("quantite_stock");
- 
-                        Produit produit = new Produit(ID, marque, modele, prix, type, description, quantite_stock);
-                        produitList.add(produit);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
- 
-        return produitList;
+
+        return produitList; // Retourne la liste des produits trouvés
     }
+
 
     
     

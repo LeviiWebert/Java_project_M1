@@ -1,13 +1,11 @@
 package DBTo;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 import basicObject.Client;
 import basicObject.Commande;
@@ -40,7 +38,7 @@ public class DBToclient {
 	
 	
 	public static List<Client> getClients() {
-	    List<Client> clients = new ArrayList<>();  // Renommé de "Client" à "clients"
+	    List<Client> clients = new ArrayList();  // Renommé de "Client" à "clients"
 
 	    try (Connection connection = DBconnection.getConnection()) {
 	        String query = "SELECT * FROM client";
@@ -100,10 +98,10 @@ public class DBToclient {
 	}
 
 	public static List<Commande> getCommandesByClientID(int clientID) {
-	    List<Commande> commandes = new ArrayList<>();  // Liste des commandes
+	    List<Commande> commandes = new ArrayList();  // Liste des commandes
 
 	    try (Connection connection = DBconnection.getConnection()) {
-	        String query = "SELECT * FROM commande WHERE client_id = ?";
+	        String query = "SELECT DISTINCT * FROM commande WHERE client_id = ?";
 	        
 	        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 	            preparedStatement.setInt(1, clientID);
@@ -117,7 +115,7 @@ public class DBToclient {
 	                double total = resultSet.getDouble("total_commande");  // Montant total de la commande
 
 	                // Créer une nouvelle instance de Commande et l'ajouter à la liste
-	                Commande commande = new Commande(clientID);
+	                Commande commande = new Commande(id,clientID);
 	                commande.setEtat(etat);
 	                commande.setTotal(total);
 	                commande.setDateCommande(dateCommande);

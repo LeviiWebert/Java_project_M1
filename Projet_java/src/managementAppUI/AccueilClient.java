@@ -1,8 +1,14 @@
 package managementAppUI;
 
 import basicObject.Client;
+import basicObject.Commande;
+import basicObject.LigneCommande;
+import basicObject.Produit;
+import service.DBconnection;
+import toDB.CommandeToDB;
+import DBTo.DBToproduit;
 import DBTo.DBToclient;
-
+import DBTo.DBTocommande;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,107 +16,131 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class AccueilClient extends JFrame {
-	
-	
-	
-    private JComboBox<Client> clientComboBox;
-    private JTextField nomField;
-    private JTextField prenomField;
-    private JTextField emailField;
-    private JTextField telephoneField;
-    private JTextField adresseField;
-    private JTextField dateNaissanceField;
-    private JButton submitButton;
+    private int client_id;
+    private DefaultListModel<String> listModel;
+    private JList<String> orderList;
 
-    public AccueilClient() {
-    	
+    public AccueilClient(int client_id) {
+        this.client_id = client_id;
+        Client client = (Client) DBToclient.getClientByID(client_id);
+
         setTitle("Accueil Client");
-        setSize(400, 300);
+        setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Create the client selection panel
-        JPanel clientSelectionPanel = new JPanel(new GridLayout(2, 1));
-        clientComboBox = new JComboBox<>();
-        List<Client> clients = DBToclient.getClients();
-        for (Client client : clients) {
-            clientComboBox.addItem(client);
+        // Create the list model and populate it with order IDs
+        listModel = new DefaultListModel<>();
+        System.out.print(client_id+"\n");
+        List<Commande> commandes = DBToclient.getCommandesByClientID(client_id);
+        System.out.print(commandes);
+        for (Commande commande : commandes) {
+            listModel.addElement("Order ID: " + commande.getId() + " - Date: " + commande.getDateCommande());
         }
 
-        clientSelectionPanel.add(new JLabel("Sélectionnez un client existant:"));
-        clientSelectionPanel.add(clientComboBox);
+        // Create the order list and add it to a scroll pane
+        orderList = new JList<>(listModel);
+        JScrollPane scrollPane = new JScrollPane(orderList);
 
-        // Create the new client form
-        JPanel newClientPanel = new JPanel(new GridLayout(6, 2));
-        nomField = new JTextField();
-        prenomField = new JTextField();
-        emailField = new JTextField();
-        telephoneField = new JTextField();
-        adresseField = new JTextField();
-        dateNaissanceField = new JTextField();
-
-        newClientPanel.add(new JLabel("Nom:"));
-        newClientPanel.add(nomField);
-        newClientPanel.add(new JLabel("Prénom:"));
-        newClientPanel.add(prenomField);
-        newClientPanel.add(new JLabel("Email:"));
-        newClientPanel.add(emailField);
-        newClientPanel.add(new JLabel("Téléphone:"));
-        newClientPanel.add(telephoneField);
-        newClientPanel.add(new JLabel("Adresse:"));
-        newClientPanel.add(adresseField);
-        newClientPanel.add(new JLabel("Date de Naissance:"));
-        newClientPanel.add(dateNaissanceField);
-
-        // Create the submit button
-        submitButton = new JButton("Soumettre");
-        submitButton.addActionListener(new ActionListener() {
+        // Create the view order details button
+        JButton viewOrderDetailsButton = new JButton("View Order Details");
+        viewOrderDetailsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                handleSubmit();
+                viewOrderDetails();
             }
         });
 
+        
+        // Create the shop button
+        JButton shopButton = new JButton("Shop");
+        shopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                openShop();
+            }
+        });
+        
+        JButton deleteOrderButton = new JButton("Cancel Order");
+        deleteOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteOrder();
+            }
+        });
+
+        // Create a panel to hold the buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 1));
+        buttonPanel.add(viewOrderDetailsButton);
+        buttonPanel.add(shopButton);
+        buttonPanel.add(deleteOrderButton);
+
         // Add components to the frame
-        add(clientSelectionPanel, BorderLayout.NORTH);
-        add(newClientPanel, BorderLayout.CENTER);
-        add(submitButton, BorderLayout.SOUTH);
+        add(scrollPane, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.WEST);
     }
 
-    private void handleSubmit() {
-        Client selectedClient = (Client) clientComboBox.getSelectedItem();
-        if (selectedClient != null) {
-            // Handle existing client login
-            JOptionPane.showMessageDialog(this, "Client existant sélectionné: " + selectedClient.getNom());
-            // Redirection vers la classe Shop avec le client existant
-            Shop shop = new Shop(selectedClient.getClientID());
-            shop.setVisible(true);
-            this.dispose();
-        } else {
-            // Handle new client creation
-            String nom = nomField.getText();
-            String prenom = prenomField.getText();
-            String email = emailField.getText();
-            String telephone = telephoneField.getText();
-            String adresse = adresseField.getText();
-            String dateNaissance = dateNaissanceField.getText();
+    // View order details
+    private void viewOrderDetails() {
+        String selectedOrder = orderList.getSelectedValue();
+        if (selectedOrder == null) {
+            JOptionPane.showMessageDialog(this, "No order selected.");
+            return;
+        }
 
-            if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || telephone.isEmpty() || adresse.isEmpty() || dateNaissance.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tous les champs doivent être remplis.");
-            } else {
-                Client newClient = new Client(dateNaissance, nom, prenom, email, telephone, DBToclient.getMaxClientID() + 1, adresse);
-                JOptionPane.showMessageDialog(this, "Nouveau client créé: " + newClient.getNom());
-                // Redirection vers la classe Shop avec le nouveau client
-                Shop shop = new Shop(newClient.getClientID());
-                shop.setVisible(true);
-                this.dispose();
-            }
+        int orderId = Integer.parseInt(selectedOrder.split(" ")[2]);
+        Commande commande = DBTocommande.getCommandeById(orderId);
+        if (commande == null) {
+            JOptionPane.showMessageDialog(this, "Order not found.");
+            return;
+        }
+
+        StringBuilder orderDetails = new StringBuilder("Order Details:\n");
+        orderDetails.append("Order ID: ").append(commande.getId()).append("\n");
+        orderDetails.append("Date: ").append(commande.getDateCommande()).append("\n");
+        orderDetails.append("Status: ").append(commande.getEtat()).append("\n");
+        orderDetails.append("Products:\n");
+        for (LigneCommande ligne : commande.getLignes()) {
+            orderDetails.append(ligne.getProduit().getMarque()).append(" : ")
+                        .append(ligne.getQuantite()).append(" x ")
+                        .append(ligne.getPrixUnitaire()).append(" = ")
+                        .append(ligne.getPrixTotal()).append("\n");
+        }
+        orderDetails.append("Total: ").append(commande.getTotal());
+
+        JOptionPane.showMessageDialog(this, orderDetails.toString());
+    }
+	 // Method to delete an order
+    private void deleteOrder() {
+        String selectedOrder = orderList.getSelectedValue();
+        if (selectedOrder == null) {
+            JOptionPane.showMessageDialog(this, "No order selected.");
+            return;
+        }
+
+        int orderId = Integer.parseInt(selectedOrder.split(" ")[2]);
+        int confirmation = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete Order ID: " + orderId + "?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+
+        if (confirmation == JOptionPane.YES_OPTION) {
+            CommandeToDB.deleteCommande(orderId);
+            listModel.removeElement(selectedOrder);
+            JOptionPane.showMessageDialog(this, "Order ID: " + orderId + " has been deleted.");
         }
     }
 
+    
+
+    // Open the shop window
+    private void openShop() {
+        Shop shop = new Shop(client_id);
+        shop.setVisible(true);
+        this.dispose();
+    }
+
     public static void main(String[] args) {
-        AccueilClient accueilClient = new AccueilClient();
+        // Create and show the AccueilClient
+        AccueilClient accueilClient = new AccueilClient(1); // Assuming client_id is 1 for testing
         accueilClient.setVisible(true);
     }
 }

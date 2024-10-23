@@ -11,7 +11,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Shop extends JFrame {
 	
@@ -35,7 +37,7 @@ public class Shop extends JFrame {
         // Create the list model and populate it with product names
         listModel = new DefaultListModel<>();
         for (Produit product : my_product) {
-            listModel.addElement(product.getMarque() + " " + product.getModele());
+            listModel.addElement(product.getModele());
         }
 
         // Create the product list and add it to a scroll pane
@@ -78,6 +80,19 @@ public class Shop extends JFrame {
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(orderButton);
         buttonPanel.add(ordersButton);
+        
+     // Create the back button
+        JButton backButton = new JButton("Back to Accueil");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backToAccueil();
+            }
+        });
+
+        // Add the back button to the button panel
+        buttonPanel.add(backButton);
+
 
         // Add components to the frame
         add(searchPanel, BorderLayout.NORTH);
@@ -91,49 +106,111 @@ public class Shop extends JFrame {
         listModel.clear();
         for (Produit product : my_product) {
             if (product.getMarque().toLowerCase().contains(searchTerm) || product.getModele().toLowerCase().contains(searchTerm)) {
-                listModel.addElement(product.getMarque() + " " + product.getModele());
+                listModel.addElement(product.getModele());
             }
         }
     }
 
-    // Order selected products
     private void orderProducts() {
-        List<String> selectedProductNames = productList.getSelectedValuesList();
-        List<Produit> selectedProducts = DBToproduit.getproduitByName(selectedProductNames);
-
-        if (selectedProductNames.isEmpty()) {
+        List<String> selectedProductModeles = productList.getSelectedValuesList();
+        List<Produit> selectedProducts = DBToproduit.getproduitByModele(selectedProductModeles);
+        
+        if (selectedProducts.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No products selected.");
-        } else {
-            Commande commande = new Commande(client_id);
-            for (Produit produit : selectedProducts) {
-                commande.ajouterProduit(produit, client_id);
-            }
-            CommandeToDB.addCommande(commande);
-            StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
-            for (String productName : selectedProductNames) {
-                orderSummary.append(productName).append("\n");
-            }
-            JOptionPane.showMessageDialog(this, orderSummary.toString());
+            return;
         }
+
+        
+        Commande commande = new Commande(client_id);
+        
+        JDialog dialog = new JDialog(this, "Adjust Quantities", true);
+        dialog.setLayout(new BorderLayout());
+        dialog.setSize(400, 300);
+        dialog.setLocationRelativeTo(this);
+
+        Map<Produit, Integer> productQuantities = new HashMap<>();
+        JPanel productsPanel = new JPanel(new GridLayout(selectedProducts.size(), 1));
+
+        for (Produit product : selectedProducts) {
+            productQuantities.put(product, 0);  // Initialize quantity to 0
+
+            JPanel productPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            JLabel nameLabel = new JLabel(product.getMarque() + " " + product.getModele());
+            JButton minusButton = new JButton("-");
+            JLabel quantityLabel = new JLabel("0");
+            JButton plusButton = new JButton("+");
+
+            minusButton.addActionListener(e -> {
+                int quantity = productQuantities.get(product);
+                if (quantity > 0) {
+                    productQuantities.put(product, --quantity);
+                    quantityLabel.setText(String.valueOf(quantity));
+                }
+            });
+
+            plusButton.addActionListener(e -> {
+                int quantity = productQuantities.get(product);
+                productQuantities.put(product, ++quantity);
+                quantityLabel.setText(String.valueOf(quantity));
+            });
+
+            productPanel.add(nameLabel);
+            productPanel.add(minusButton);
+            productPanel.add(quantityLabel);
+            productPanel.add(plusButton);
+
+            productsPanel.add(productPanel);
+        }
+
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(e -> {
+            for (Produit product : selectedProducts) {
+                int quantity = productQuantities.get(product);
+                if (quantity > 0) {
+                    commande.ajouterProduit(product, quantity);
+                    System.out.print("Produit ajouté avec succès à la commande");                
+                }
+            }
+
+            if (commande.getLignes().size() > 0) {
+                CommandeToDB.addCommande(commande);
+                JOptionPane.showMessageDialog(this, "Order placed successfully!");
+            } else {
+                JOptionPane.showMessageDialog(this, "No quantities selected.");
+            }
+
+            dialog.dispose();
+        });
+
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(confirmButton);
+
+        dialog.add(new JScrollPane(productsPanel), BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        dialog.setVisible(true);
+
+
+        // Affichage du récapitulatif de la commande
+        StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
+        for (String productName : selectedProductModeles) {
+            orderSummary.append(productName).append("\n");
+        }
+        JOptionPane.showMessageDialog(this, orderSummary.toString());
     }
 
-    // View orders and their status
+
     private void viewOrders() {
-        List<Commande> commandes = DBToclient.getCommandesByClientID(client_id);
-        if (commandes.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No orders found.");
-        } else {
-            StringBuilder ordersSummary = new StringBuilder("Your orders:\n");
-            for (Commande commande : commandes) {
-                ordersSummary.append("Order ID: ").append(commande.getId())
-                        .append(", Date: ").append(commande.getDateCommande())
-                        .append(", Status: ").append(commande.getEtat())
-                        .append("\n");
-            }
-            JOptionPane.showMessageDialog(this, ordersSummary.toString());
-        }
+        AccueilClient accueilClient = new AccueilClient(client_id);
+        accueilClient.setVisible(true);
+        this.dispose();
     }
 
+    // Back to AccueilClient
+    private void backToAccueil() {
+        AccueilClient accueilClient = new AccueilClient(client_id);
+        accueilClient.setVisible(true);
+        this.dispose();
+    }
     public static void main(String[] args) {
         // Create and show the shop
         Shop shop = new Shop(1); // Assuming client_id is 1 for testing
