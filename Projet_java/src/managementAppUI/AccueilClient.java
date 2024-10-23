@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.util.List;
 
 public class AccueilClient extends JFrame {
+	
+	
+	
     private JComboBox<Client> clientComboBox;
     private JTextField nomField;
     private JTextField prenomField;
@@ -20,6 +23,7 @@ public class AccueilClient extends JFrame {
     private JButton submitButton;
 
     public AccueilClient() {
+    	
         setTitle("Accueil Client");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

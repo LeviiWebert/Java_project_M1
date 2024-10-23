@@ -15,16 +15,28 @@ public class Produit {
     
     
     public Produit() {
-    	//this.id = DBToproduit.getMaxClientID() + 1;   relation avec la base de donnee
+    	this.id = DBToproduit.getMaxProduitID() + 1;   
     }
     
     
-    public Produit(int id, String marque, String modele, double prix2, String type,String description,int quantite_stock){
+    public Produit(String marque, String modele, double prix, String type,String description,int quantite_stock){
     	
-        this.id = id;
+        this.id = DBToproduit.getMaxProduitID() + 1;   
         this.marque = marque ;
         this.modele = modele;
-        this.prix = prix2;
+        this.prix = prix;
+        this.type = type;
+        this.description = description;
+        this.quantite_stock = quantite_stock;
+        
+    }
+    
+   public Produit(int id, String marque, String modele, double prix, String type,String description,int quantite_stock){
+    	
+        this.id = id;   
+        this.marque = marque ;
+        this.modele = modele;
+        this.prix = prix;
         this.type = type;
         this.description = description;
         this.quantite_stock = quantite_stock;

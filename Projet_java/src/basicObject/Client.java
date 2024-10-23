@@ -114,5 +114,9 @@ public class Client {
 	public String afficherDetails() {
 		return "C'est le client n°"+String.valueOf(clientID);
 	}
+	
+	public String toString() {
+	        return nom + " " + prenom;  // Affiche "Nom Prénom" dans la liste déroulante
+	}
 
 }
