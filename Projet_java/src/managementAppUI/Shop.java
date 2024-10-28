@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Shop extends JFrame {
-	
     private List<Produit> my_product;
     private DefaultListModel<String> listModel;
     private JList<String> productList;
@@ -178,7 +177,6 @@ public class Shop extends JFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "No quantities selected.");
             }
-
             dialog.dispose();
         });
 
