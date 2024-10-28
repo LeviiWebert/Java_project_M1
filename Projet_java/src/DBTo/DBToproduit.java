@@ -53,10 +53,11 @@ public class DBToproduit {
                     String type = resultSet.getString("type");
                     String description = resultSet.getString("description");
                     int quantite_stock = resultSet.getInt("quantite_stock");
+                    String adr_img = resultSet.getString("adr_img");
+
                     
                     
-                    
-                    Produit prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock);
+                    Produit prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,adr_img);
                     produit.add(prduit);
                 }
             }
@@ -83,9 +84,11 @@ public class DBToproduit {
                         String type = resultSet.getString("type");
                         String description = resultSet.getString("description");
                         int quantiteStock = resultSet.getInt("quantite_stock");
+                        String adr_img = resultSet.getString("adresse_image");
+
 
                         // Création d'une instance de Produit
-                        produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock);
+                        produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock,adr_img);
                     }
                 }
             }

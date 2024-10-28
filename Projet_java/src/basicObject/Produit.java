@@ -12,6 +12,7 @@ public class Produit {
     private String type;              
     private String description;
     private int quantite_stock;
+    private String adr_img;
     
     
     public Produit() {
@@ -19,7 +20,7 @@ public class Produit {
     }
     
     
-    public Produit(String marque, String modele, double prix, String type,String description,int quantite_stock){
+    public Produit(String marque, String modele, double prix, String type,String description,int quantite_stock,String adr_img){
     	
         this.id = DBToproduit.getMaxProduitID() + 1;   
         this.marque = marque ;
@@ -28,10 +29,10 @@ public class Produit {
         this.type = type;
         this.description = description;
         this.quantite_stock = quantite_stock;
-        
+        this.adr_img = adr_img;
     }
     
-   public Produit(int id, String marque, String modele, double prix, String type,String description,int quantite_stock){
+   public Produit(int id, String marque, String modele, double prix, String type,String description,int quantite_stock,String adr_img){
     	
         this.id = id;   
         this.marque = marque ;
@@ -40,6 +41,7 @@ public class Produit {
         this.type = type;
         this.description = description;
         this.quantite_stock = quantite_stock;
+        this.adr_img = adr_img;
         
     }
 
@@ -111,6 +113,14 @@ public class Produit {
 
 	public void setQuantite_stock(int quantite_stock) {
 		this.quantite_stock = quantite_stock;
+	}
+	
+	public String getImgadr() {
+		return adr_img;
+	}
+	
+	public void setImgadr(String adr_img) {
+		this.adr_img = adr_img;
 	}
 
 

@@ -15,13 +15,13 @@ public class Main {
     	Authentification a = new Authentification() ;
     	a.setVisible(true);
         // Création d'un client
-        Client client = new Client(new DateBDD(2002, 12, 10).getDateBDD(),"John Doe","DOe", "john.doe@example.com", "123456789","adresse");
+        Client client = new Client(new DateBDD(2002, 12, 10).getDateBDD(),"John Doe","DOe", "john.doe@example.com", "123456789","adresse","1234");
 
         // Ajout du client à la base de données
         ClientToDB.addCustomer(client);
 
         // Création d'un produit
-        Produit produit = new Produit(1, "Laptop","", 999.99,"test", "A high-performance laptop", 10);
+        Produit produit = new Produit(1, "Laptop","", 999.99,"test", "A high-performance laptop", 10,null);
         // Ajout du produit à la base de données
         ProduitToDB.addProduit(produit);
 

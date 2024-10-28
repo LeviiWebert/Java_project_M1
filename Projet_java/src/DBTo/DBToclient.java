@@ -54,9 +54,10 @@ public class DBToclient {
 	                String telephone = resultSet.getString("telephone");
 	                String adresse = resultSet.getString("adresse");
 	                String dateNaissance = resultSet.getString("date_naissance");  // Renommé pour correspondre à la convention camelCase
-
+	                String mot_de_passe = resultSet.getString("mdp");
+	                
 	                // Créer une nouvelle instance de Client et l'ajouter à la liste
-	                Client client = new Client(dateNaissance, nom, prenom, email, telephone, clientID, adresse);
+	                Client client = new Client(dateNaissance, nom, prenom, email, telephone, clientID, adresse,mot_de_passe);
 	                clients.add(client);  // Ajouté à la liste "clients"
 	            }
 	        }
@@ -84,9 +85,11 @@ public class DBToclient {
 	                    String telephone = resultSet.getString("telephone");
 	                    String adresse = resultSet.getString("adresse");
 	                    String dateNaissance = resultSet.getString("date_naissance");
+		                String mot_de_passe = resultSet.getString("mdp");
+
 
 	                    // Créer une nouvelle instance de Client
-	                    client = new Client(dateNaissance, nom, prenom, email, telephone, clientID, adresse);
+	                    client = new Client(dateNaissance, nom, prenom, email, telephone, clientID, adresse,mot_de_passe);
 	                }
 	            }
 	        }
@@ -128,6 +131,25 @@ public class DBToclient {
 
 	    return commandes;  // Retourne la liste des commandes
 	}
+	
+    public static String getClientPassword(int clientID) {
+        String password = null;
+        String query = "SELECT mdp FROM client WHERE clientID = ?";
+
+        try (Connection connection = DBconnection.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             
+            preparedStatement.setInt(1, clientID);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                password = resultSet.getString("mdp");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return password;
+    }
 
 	
 	
