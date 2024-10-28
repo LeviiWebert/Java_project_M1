@@ -21,7 +21,7 @@ public class AuthentificationClient extends JFrame {
 
     public AuthentificationClient() {
         setTitle("Authentification Client");
-        setSize(400, 300);
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
