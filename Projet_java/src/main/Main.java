@@ -51,7 +51,7 @@ public class Main {
         commande.afficherDetails();
 
         System.out.println("\nDétails du produit :");
-        produit.afficherDetails();
+        System.out.println(produit.toString());
 
         System.out.println("\nDétails de la facture :");
         facture.afficherDetails();

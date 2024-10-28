@@ -145,7 +145,7 @@ public class DBToproduit {
     	
         
         Produit p = DBToproduit.getProduitByid(maxproduitID);
-        p.afficherDetails();
+        p.toString();
     	
     	//List<Produit> produits = DBToproduit.getproduit();
 

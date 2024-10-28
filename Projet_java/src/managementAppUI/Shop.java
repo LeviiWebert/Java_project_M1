@@ -17,6 +17,8 @@ import java.util.Map;
 
 public class Shop extends JFrame {
 	
+	
+	
     private List<Produit> my_product;
     private DefaultListModel<String> listModel;
     private JList<String> productList;
