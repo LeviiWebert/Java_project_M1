@@ -77,7 +77,7 @@ public class DBTofacture {
 	    return facture;  // Retourner la facture trouvée (ou null si aucune facture n'a été trouvée)
 	}
 	
-	public List<Facture> getToutesLesFactures() {
+	public static List<Facture> getToutesLesFactures() {
 	    List<Facture> factures = new ArrayList<>();
 
 	    // Bloc try pour gérer la connexion

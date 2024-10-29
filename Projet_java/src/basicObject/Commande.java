@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import DBTo.DBToclient;
 import DBTo.DBTocommande;
+import DBTo.DBTofacture;
 import toDB.LigneCommandeToDB;
 
 
@@ -193,4 +194,26 @@ public Commande(int id, int clientId) {
 		
 		return produitsMap;
 	}
+//	public Facture getFacture() {
+//	    for (Facture facture : DBTofacture.getToutesLesFactures()) {
+//	        if (facture.getCommande().equals(this)) {
+//	            return facture;
+//	        }
+//	    }
+//	    return null; // Retourne null si aucune facture n'est trouvée
+//	}
+	
+	public Facture getFacture() {
+	    System.out.println("Recherche de la facture pour la commande : " + this.getId());
+	    for (Facture facture : DBTofacture.getToutesLesFactures()) {
+	        System.out.println("Vérification de la facture : " + facture.getId() + " pour la commande : " + facture.getCommande().getId());
+	        if (facture.getCommande().getId()==this.getId()) {
+	            System.out.println("Facture trouvée : " + facture.getId());
+	            return facture;
+	        }
+	    }
+	    System.out.println("Aucune facture trouvée pour la commande : " + this.getId());
+	    return null; // Retourne null si aucune facture n'est trouvée
+	}
+
 }

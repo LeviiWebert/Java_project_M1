@@ -2,6 +2,7 @@ package managementAppUI;
 
 import basicObject.Client;
 import basicObject.Commande;
+import basicObject.Facture;
 import basicObject.LigneCommande;
 import basicObject.Produit;
 import service.DBconnection;
@@ -34,7 +35,6 @@ public class AccueilClient extends JFrame {
         listModel = new DefaultListModel<>();
         System.out.print(client_id+"\n");
         List<Commande> commandes = DBToclient.getCommandesByClientID(client_id);
-        System.out.print(commandes);
         for (Commande commande : commandes) {
             listModel.addElement("Order ID: " + commande.getId() + " - Date: " + commande.getDateCommande());
         }
@@ -81,36 +81,70 @@ public class AccueilClient extends JFrame {
         add(buttonPanel, BorderLayout.WEST);
     }
 
-    // View order details
+ // View order details
     private void viewOrderDetails() {
         String selectedOrder = orderList.getSelectedValue();
         if (selectedOrder == null) {
-            JOptionPane.showMessageDialog(this, "Selectionner une commande.");
+            JOptionPane.showMessageDialog(this, "Sélectionner une commande.");
             return;
         }
 
         int orderId = Integer.parseInt(selectedOrder.split(" ")[2]);
         Commande commande = DBTocommande.getCommandeById(orderId);
         if (commande == null) {
-            JOptionPane.showMessageDialog(this, "Commande non trouvé.");
+            JOptionPane.showMessageDialog(this, "Commande non trouvée.");
             return;
         }
 
-        StringBuilder orderDetails = new StringBuilder("Détails de la commande:\n");
-        orderDetails.append("Identifiant : ").append(commande.getId()).append("\n");
-        orderDetails.append("Date : ").append(commande.getDateCommande()).append("\n");
-        orderDetails.append("Status : ").append(commande.getEtat()).append("\n");
-        orderDetails.append("Produits :\n");
-        for (LigneCommande ligne : commande.getLignes()) {
-            orderDetails.append(ligne.getProduit().getMarque()).append(" : ")
-                        .append(ligne.getQuantite()).append(" x ")
-                        .append(ligne.getPrixUnitaire()).append(" = ")
-                        .append(ligne.getPrixTotal()).append("\n");
-        }
-        orderDetails.append("Total: ").append(commande.getTotal());
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JOptionPane.showMessageDialog(this, orderDetails.toString());
+        JLabel titleLabel = new JLabel("Détails de la commande");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        panel.add(titleLabel);
+
+        panel.add(Box.createVerticalStrut(10));
+
+        panel.add(new JLabel("Identifiant : " + commande.getId()));
+        panel.add(new JLabel("Date : " + commande.getDateCommande()));
+        panel.add(new JLabel("Statut : " + commande.getEtat()));
+
+        panel.add(Box.createVerticalStrut(10));
+
+        JLabel productsLabel = new JLabel("Produits :");
+        productsLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        panel.add(productsLabel);
+
+        for (LigneCommande ligne : commande.getLignes()) {
+            JLabel productLabel = new JLabel(ligne.getProduit().getMarque() + " : " +
+                    ligne.getQuantite() + " x " + ligne.getPrixUnitaire() + " = " + ligne.getPrixTotal());
+            panel.add(productLabel);
+        }
+
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(new JLabel("Total : " + commande.getTotal()));
+
+        panel.add(Box.createVerticalStrut(20));
+        
+        JButton factureButton = new JButton("Voir la facture de la commande");
+        factureButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	System.out.print(commande);
+                afficherFacture(commande.getFacture());
+            }
+        });
+        panel.add(factureButton);
+        
+
+        JDialog dialog = new JDialog((Frame) null, "Détails de la Commande", true);
+        dialog.getContentPane().add(panel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
     }
+
 	 // Method to delete an order
     private void deleteOrder() {
         String selectedOrder = orderList.getSelectedValue();
@@ -137,7 +171,64 @@ public class AccueilClient extends JFrame {
         shop.setVisible(true);
         this.dispose();
     }
+    private void afficherFacture(Facture facture) {
+    	
+        // Créer une nouvelle fenêtre pour afficher la facture
+        JDialog factureDialog = new JDialog(this, "Facture", true);
+        factureDialog.setSize(400, 300);
+        factureDialog.setLayout(new BorderLayout());
+        factureDialog.getContentPane().setBackground(Color.LIGHT_GRAY); // Fond de la fenêtre
 
+        
+        if (facture == null) {
+            JOptionPane.showMessageDialog(factureDialog, "La facture n'existe pas", "Erreur", JOptionPane.ERROR_MESSAGE);
+            factureDialog.dispose(); // Fermer le dialogue si la facture n'existe pas
+            return;
+        }
+        else {
+        	// Titre de la facture
+            JLabel titleLabel = new JLabel("Facture #" + facture.getId(), SwingConstants.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            titleLabel.setForeground(Color.BLACK);
+            factureDialog.add(titleLabel, BorderLayout.NORTH);
+
+            // Panel pour afficher les détails de la facture
+            JPanel detailsPanel = new JPanel();
+            detailsPanel.setLayout(new GridLayout(0, 1));
+            detailsPanel.setBackground(Color.WHITE); // Fond blanc pour les détails
+
+            // Ajouter les détails des lignes de commande
+            for (LigneCommande ligne : facture.getCommande().getLignes()) {
+                Produit produit = ligne.getProduit();
+                int quantite = ligne.getQuantite();
+                double prix = produit.getPrix();
+
+                // Ajouter une ligne avec les détails du produit
+                String details = String.format("%s %s - Quantité: %d - Prix: %.2f€", 
+                    produit.getMarque(), produit.getModele(), quantite, prix);
+                JLabel detailLabel = new JLabel(details);
+                detailLabel.setForeground(Color.BLACK);
+                detailsPanel.add(detailLabel);
+            }
+
+            // Ajouter le panel des détails à la fenêtre
+            JScrollPane scrollPane = new JScrollPane(detailsPanel);
+            factureDialog.add(scrollPane, BorderLayout.CENTER);
+
+            // Bouton de fermeture
+            JButton closeButton = new JButton("Fermer");
+            closeButton.setBackground(Color.RED);
+            closeButton.setForeground(Color.WHITE);
+            closeButton.addActionListener(e -> factureDialog.dispose());
+            factureDialog.add(closeButton, BorderLayout.SOUTH);
+
+            // Afficher la fenêtre de la facture
+            factureDialog.setLocationRelativeTo(this);
+            factureDialog.setVisible(true);
+        }
+    }
+    
+    
     public static void main(String[] args) {
         // Create and show the AccueilClient
         AccueilClient accueilClient = new AccueilClient(1); // Assuming client_id is 1 for testing
