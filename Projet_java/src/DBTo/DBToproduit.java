@@ -61,14 +61,16 @@ public class DBToproduit {
 
                     
                     Produit prduit;
+                    ImageIcon image;
 					try {
-						prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,new ImageIcon(new URL(adr_img)));
+						image = new ImageIcon(new URL(adr_img));
+						image.setDescription(adr_img);
+						prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,image);
 						produit.add(prduit);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
                     
-
                 }
             }
         } catch (SQLException e) {
@@ -99,8 +101,11 @@ public class DBToproduit {
 
                         // Création d'une instance de Produit
 
+                        ImageIcon image;
                         try {
-							produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock,new ImageIcon(new URL(adr_img)));
+                        	image = new ImageIcon(new URL(adr_img));
+    						image.setDescription(adr_img);
+							produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock,image);
 						} catch (MalformedURLException e) {
 							e.printStackTrace();
 						}

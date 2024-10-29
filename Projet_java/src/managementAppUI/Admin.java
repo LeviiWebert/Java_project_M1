@@ -11,6 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -255,9 +257,16 @@ public class Admin extends JFrame {
         try {
             double prix = Double.parseDouble(prixText);
             int quantite = Integer.parseInt(quantiteText);
-
-            Produit newProduit = new Produit(marque, modele, prix, type, description, quantite, adr_img);
-            ProduitToDB.addProduit(newProduit);
+            ImageIcon image;
+            try {
+            	image = new ImageIcon(new URL(adr_img));
+				image.setDescription(adr_img);
+				Produit newProduit = new Produit(marque, modele, prix, type, description, quantite, image);
+	            ProduitToDB.addProduit(newProduit);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+            
             JOptionPane.showMessageDialog(this, "Produit ajouté avec succès.");
 
         } catch (NumberFormatException ex) {
@@ -284,7 +293,7 @@ public class Admin extends JFrame {
             try {
                 int nouvelleQuantite = Integer.parseInt(quantiteText);
                 selectedProduit.setQuantite_stock(nouvelleQuantite);
-                selectedProduit.setImgadr(adr_img);
+                selectedProduit.setImage(null);
                 ProduitToDB.updateProduit(selectedProduit);
                 JOptionPane.showMessageDialog(this, "Stock mis à jour avec succès.");
             } catch (NumberFormatException ex) {
