@@ -1,5 +1,7 @@
 package DBTo;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,13 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import basicObject.Client;
 import basicObject.Produit;
 import service.DBconnection;
 
 public class DBToproduit {
-	
-	
 	public static int getMaxProduitID() {
 	    int maxID = 0;
 	    try (Connection connection = DBconnection.getConnection()) {
@@ -53,11 +55,18 @@ public class DBToproduit {
                     String type = resultSet.getString("type");
                     String description = resultSet.getString("description");
                     int quantite_stock = resultSet.getInt("quantite_stock");
+                    String adr_img = resultSet.getString("adr_img");
                     
                     
                     
-                    Produit prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock);
-                    produit.add(prduit);
+                    Produit prduit;
+					try {
+						prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,new ImageIcon(new URL(adr_img)));
+						produit.add(prduit);
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					}
+                    
                 }
             }
         } catch (SQLException e) {
@@ -83,9 +92,14 @@ public class DBToproduit {
                         String type = resultSet.getString("type");
                         String description = resultSet.getString("description");
                         int quantiteStock = resultSet.getInt("quantite_stock");
+                        String adr_img = resultSet.getString("adr_img");
 
                         // Création d'une instance de Produit
-                        produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock);
+                        try {
+							produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock,new ImageIcon(new URL(adr_img)));
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						}
                     }
                 }
             }

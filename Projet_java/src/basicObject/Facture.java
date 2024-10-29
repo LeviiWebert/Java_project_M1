@@ -2,10 +2,9 @@ package basicObject;
 
 import java.time.LocalDate;
 
-public class Facture {
-	
-   
+import DBTo.DBTofacture;
 
+public class Facture {
 	private int id;                       // Identifiant unique de la facture
     private Commande commande;            // Référence à la commande associée
     private LocalDate dateFacture;        // Date à laquelle la facture a été générée
@@ -24,6 +23,13 @@ public class Facture {
         this.commande = commande;               // Référence à la commande
         this.dateFacture = dateFacture;    // Date actuelle
         this.montant = montant;            // Calculer le montant total de la commande
+    }
+    
+    public Facture(Commande commande) {
+        this.id = DBTofacture.getMaxIdFacture() + 1;                           // Initialisation de l'identifiant
+        this.commande = commande;               // Référence à la commande
+        this.dateFacture = LocalDate.now();     // Date actuelle
+        this.montant = calculerMontant();       // Calculer le montant total de la commande
     }
 
     // Méthode pour calculer le montant total de la commande

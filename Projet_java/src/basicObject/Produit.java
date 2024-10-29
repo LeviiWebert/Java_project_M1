@@ -1,5 +1,7 @@
 package basicObject;
 
+import javax.swing.ImageIcon;
+
 import DBTo.DBToclient;
 import DBTo.DBToproduit;
 
@@ -12,6 +14,7 @@ public class Produit {
     private String type;              
     private String description;
     private int quantite_stock;
+    private ImageIcon image;
     
     
     public Produit() {
@@ -19,7 +22,7 @@ public class Produit {
     }
     
     
-    public Produit(String marque, String modele, double prix, String type,String description,int quantite_stock){
+    public Produit(String marque, String modele, double prix, String type,String description,int quantite_stock,ImageIcon image){
     	
         this.id = DBToproduit.getMaxProduitID() + 1;   
         this.marque = marque ;
@@ -28,10 +31,11 @@ public class Produit {
         this.type = type;
         this.description = description;
         this.quantite_stock = quantite_stock;
+        this.image=image;
         
     }
     
-   public Produit(int id, String marque, String modele, double prix, String type,String description,int quantite_stock){
+   public Produit(int id, String marque, String modele, double prix, String type,String description,int quantite_stock,ImageIcon image){
     	
         this.id = id;   
         this.marque = marque ;
@@ -40,11 +44,27 @@ public class Produit {
         this.type = type;
         this.description = description;
         this.quantite_stock = quantite_stock;
+        this.image=image;
         
     }
 
 
-    public int getId() {
+	    public ImageIcon getImage() {
+		return image;
+	}
+	
+	
+	public void setImage(ImageIcon image) {
+		this.image = image;
+	}
+	
+	
+	public void setPrix(double prix) {
+		this.prix = prix;
+	}
+
+
+	public int getId() {
 		return id;
 	}
 

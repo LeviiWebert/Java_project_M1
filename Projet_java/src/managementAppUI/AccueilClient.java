@@ -44,7 +44,7 @@ public class AccueilClient extends JFrame {
         JScrollPane scrollPane = new JScrollPane(orderList);
 
         // Create the view order details button
-        JButton viewOrderDetailsButton = new JButton("View Order Details");
+        JButton viewOrderDetailsButton = new JButton("Details de la commande");
         viewOrderDetailsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -54,7 +54,7 @@ public class AccueilClient extends JFrame {
 
         
         // Create the shop button
-        JButton shopButton = new JButton("Shop");
+        JButton shopButton = new JButton("Boutique");
         shopButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,7 +62,7 @@ public class AccueilClient extends JFrame {
             }
         });
         
-        JButton deleteOrderButton = new JButton("Cancel Order");
+        JButton deleteOrderButton = new JButton("Annuler ma commande");
         deleteOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,22 +85,22 @@ public class AccueilClient extends JFrame {
     private void viewOrderDetails() {
         String selectedOrder = orderList.getSelectedValue();
         if (selectedOrder == null) {
-            JOptionPane.showMessageDialog(this, "No order selected.");
+            JOptionPane.showMessageDialog(this, "Selectionner une commande.");
             return;
         }
 
         int orderId = Integer.parseInt(selectedOrder.split(" ")[2]);
         Commande commande = DBTocommande.getCommandeById(orderId);
         if (commande == null) {
-            JOptionPane.showMessageDialog(this, "Order not found.");
+            JOptionPane.showMessageDialog(this, "Commande non trouvé.");
             return;
         }
 
-        StringBuilder orderDetails = new StringBuilder("Order Details:\n");
-        orderDetails.append("Order ID: ").append(commande.getId()).append("\n");
-        orderDetails.append("Date: ").append(commande.getDateCommande()).append("\n");
-        orderDetails.append("Status: ").append(commande.getEtat()).append("\n");
-        orderDetails.append("Products:\n");
+        StringBuilder orderDetails = new StringBuilder("Détails de la commande:\n");
+        orderDetails.append("Identifiant : ").append(commande.getId()).append("\n");
+        orderDetails.append("Date : ").append(commande.getDateCommande()).append("\n");
+        orderDetails.append("Status : ").append(commande.getEtat()).append("\n");
+        orderDetails.append("Produits :\n");
         for (LigneCommande ligne : commande.getLignes()) {
             orderDetails.append(ligne.getProduit().getMarque()).append(" : ")
                         .append(ligne.getQuantite()).append(" x ")

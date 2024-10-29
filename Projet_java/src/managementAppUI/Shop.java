@@ -6,50 +6,52 @@ import basicObject.Produit;
 import toDB.CommandeToDB;
 import DBTo.DBToproduit;
 import DBTo.DBToclient;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Shop extends JFrame {
-	
-	
-	
-    private List<Produit> my_product;
+    private List<Produit> my_products;
     private DefaultListModel<String> listModel;
     private JList<String> productList;
     private JTextField searchField;
     private int client_id;
+    private List<Produit> panier;
 
     public Shop(int client_id) {
+    	listModel = new DefaultListModel<String>();
         this.client_id = client_id;
-        my_product = DBToproduit.getproduit();
+        my_products = DBToproduit.getproduit();
         Client client = (Client) DBToclient.getClientByID(client_id);
+        this.panier = new ArrayList<Produit>();
 
-        setTitle("Shop");
+        setTitle("Boutique");
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // Create the list model and populate it with product names
-        listModel = new DefaultListModel<>();
-        for (Produit product : my_product) {
-            listModel.addElement(product.getModele());
+        JPanel productPanel = new JPanel();
+        productPanel.setLayout(new GridLayout(0, 2));  // Affichage vertical des produits
+
+        for (Produit product : my_products) {
+            JPanel panel = createProductPanel(product);
+            productPanel.add(panel);
+            listModel.add(product.getId(),product.getModele());
         }
+        
+        JScrollPane scrollPane = new JScrollPane(productPanel);
 
-        // Create the product list and add it to a scroll pane
-        productList = new JList<>(listModel);
-        JScrollPane scrollPane = new JScrollPane(productList);
-
+        
         // Create the search panel
         JPanel searchPanel = new JPanel(new BorderLayout());
         searchField = new JTextField();
-        JButton searchButton = new JButton("Search");
+        JButton searchButton = new JButton("Rechercher");
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,17 +62,9 @@ public class Shop extends JFrame {
         searchPanel.add(searchField, BorderLayout.CENTER);
         searchPanel.add(searchButton, BorderLayout.EAST);
 
-        // Create the order button
-        JButton orderButton = new JButton("Order");
-        orderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                orderProducts();
-            }
-        });
 
-        // Create the orders button
-        JButton ordersButton = new JButton("View Orders");
+        // Button pour voir ses commandes
+        JButton ordersButton = new JButton("Voir mes commandes");
         ordersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -80,11 +74,10 @@ public class Shop extends JFrame {
 
         // Create a panel to hold the order and orders buttons
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(orderButton);
         buttonPanel.add(ordersButton);
         
-     // Create the back button
-        JButton backButton = new JButton("Back to Accueil");
+        // Create the back button
+        JButton backButton = new JButton("Retourner à l'Accueil");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,6 +88,15 @@ public class Shop extends JFrame {
         // Add the back button to the button panel
         buttonPanel.add(backButton);
 
+        // Bouton pour voir le panier
+        JButton viewCartButton = new JButton("Voir le Panier");
+        viewCartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewCart();
+            }
+        });
+        buttonPanel.add(viewCartButton, BorderLayout.SOUTH);
 
         // Add components to the frame
         add(searchPanel, BorderLayout.NORTH);
@@ -106,100 +108,14 @@ public class Shop extends JFrame {
     private void searchProducts() {
         String searchTerm = searchField.getText().toLowerCase();
         listModel.clear();
-        for (Produit product : my_product) {
+        for (Produit product : my_products) {
             if (product.getMarque().toLowerCase().contains(searchTerm) || product.getModele().toLowerCase().contains(searchTerm)) {
                 listModel.addElement(product.getModele());
             }
         }
     }
 
-    private void orderProducts() {
-        List<String> selectedProductModeles = productList.getSelectedValuesList();
-        List<Produit> selectedProducts = DBToproduit.getproduitByModele(selectedProductModeles);
-        
-        if (selectedProducts.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No products selected.");
-            return;
-        }
-
-        
-        Commande commande = new Commande(client_id);
-        
-        JDialog dialog = new JDialog(this, "Adjust Quantities", true);
-        dialog.setLayout(new BorderLayout());
-        dialog.setSize(400, 300);
-        dialog.setLocationRelativeTo(this);
-
-        Map<Produit, Integer> productQuantities = new HashMap<>();
-        JPanel productsPanel = new JPanel(new GridLayout(selectedProducts.size(), 1));
-
-        for (Produit product : selectedProducts) {
-            productQuantities.put(product, 0);  // Initialize quantity to 0
-
-            JPanel productPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-            JLabel nameLabel = new JLabel(product.getMarque() + " " + product.getModele());
-            JButton minusButton = new JButton("-");
-            JLabel quantityLabel = new JLabel("0");
-            JButton plusButton = new JButton("+");
-
-            minusButton.addActionListener(e -> {
-                int quantity = productQuantities.get(product);
-                if (quantity > 0) {
-                    productQuantities.put(product, --quantity);
-                    quantityLabel.setText(String.valueOf(quantity));
-                }
-            });
-
-            plusButton.addActionListener(e -> {
-                int quantity = productQuantities.get(product);
-                productQuantities.put(product, ++quantity);
-                quantityLabel.setText(String.valueOf(quantity));
-            });
-
-            productPanel.add(nameLabel);
-            productPanel.add(minusButton);
-            productPanel.add(quantityLabel);
-            productPanel.add(plusButton);
-
-            productsPanel.add(productPanel);
-        }
-
-        JButton confirmButton = new JButton("Confirm");
-        confirmButton.addActionListener(e -> {
-            for (Produit product : selectedProducts) {
-                int quantity = productQuantities.get(product);
-                if (quantity > 0) {
-                    commande.ajouterProduit(product, quantity);
-                    System.out.print("Produit ajouté avec succès à la commande");                
-                }
-            }
-
-            if (commande.getLignes().size() > 0) {
-                CommandeToDB.addCommande(commande);
-                JOptionPane.showMessageDialog(this, "Order placed successfully!");
-            } else {
-                JOptionPane.showMessageDialog(this, "No quantities selected.");
-            }
-
-            dialog.dispose();
-        });
-
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(confirmButton);
-
-        dialog.add(new JScrollPane(productsPanel), BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-        dialog.setVisible(true);
-
-
-        // Affichage du récapitulatif de la commande
-        StringBuilder orderSummary = new StringBuilder("You have ordered:\n");
-        for (String productName : selectedProductModeles) {
-            orderSummary.append(productName).append("\n");
-        }
-        JOptionPane.showMessageDialog(this, orderSummary.toString());
-    }
-
+    
 
     private void viewOrders() {
         AccueilClient accueilClient = new AccueilClient(client_id);
@@ -213,6 +129,52 @@ public class Shop extends JFrame {
         accueilClient.setVisible(true);
         this.dispose();
     }
+    
+    
+    // Créer un panel pour chaque produit avec un bouton pour afficher les détails et ajouter au panier
+    private JPanel createProductPanel(Produit product) {
+        JPanel panel = new JPanel(new BorderLayout());
+
+        ImageIcon icon = new ImageIcon(product.getImage().getImage());
+        Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Redimensionner à 100x100 pixels
+        JLabel imageLabel = new JLabel(new ImageIcon(img)); 
+        JLabel detailsLabel = new JLabel("<html>" + "Marque : " + product.getMarque() 
+        + "<br>" + "Modèle : " + product.getModele() 
+        + "<br>" + "Type : " + product.getType() 
+        + "<br>" + "Prix : " + product.getPrix() + "€</html>");
+        JButton detailsButton = new JButton("Détails");
+        JButton addToCartButton = new JButton("Ajouter au panier");
+        panel.setPreferredSize(new Dimension(150, 200));
+        detailsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new DetailsProduit(product).setVisible(true);
+            }
+        });
+
+        addToCartButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panier.add(product);
+                JOptionPane.showMessageDialog(null, product.getModele() + " ajouté au panier !");
+            }
+        });
+
+        panel.add(imageLabel, BorderLayout.WEST);
+        panel.add(detailsLabel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.add(detailsButton);
+        buttonPanel.add(addToCartButton);
+
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        return panel;
+    }
+
+    private void viewCart() {
+        new Panier(panier,client_id).setVisible(true);;
+    }
+    
     public static void main(String[] args) {
         // Create and show the shop
         Shop shop = new Shop(1); // Assuming client_id is 1 for testing
