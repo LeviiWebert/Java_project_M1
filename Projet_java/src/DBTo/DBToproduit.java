@@ -58,6 +58,7 @@ public class DBToproduit {
                     String adr_img = resultSet.getString("adr_img");
                     
                     
+
                     
                     Produit prduit;
 					try {
@@ -67,6 +68,7 @@ public class DBToproduit {
 						e.printStackTrace();
 					}
                     
+
                 }
             }
         } catch (SQLException e) {
@@ -92,14 +94,17 @@ public class DBToproduit {
                         String type = resultSet.getString("type");
                         String description = resultSet.getString("description");
                         int quantiteStock = resultSet.getInt("quantite_stock");
+
                         String adr_img = resultSet.getString("adr_img");
 
                         // Création d'une instance de Produit
+
                         try {
 							produit = new Produit(produitId, marque, modele, prix, type, description, quantiteStock,new ImageIcon(new URL(adr_img)));
 						} catch (MalformedURLException e) {
 							e.printStackTrace();
 						}
+
                     }
                 }
             }

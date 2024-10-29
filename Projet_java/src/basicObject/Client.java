@@ -11,6 +11,7 @@ public class Client {
 	private String email;
 	private String telephone;
 	private String adresse;
+	private String mdp;
 	
 
 	
@@ -18,7 +19,7 @@ public class Client {
 		this.clientID = DBToclient.getMaxClientID() + 1;		
 	}
 	
-	public Client(String date_naissance,String nom,String prenom,String email,String telephone,String adresse){
+	public Client(String date_naissance,String nom,String prenom,String email,String telephone,String adresse,String mdp){
 		
 		this.clientID = DBToclient.getMaxClientID() + 1;   // relation avec la base de donnes
 		this.date_naissance = date_naissance;
@@ -27,10 +28,11 @@ public class Client {
 		this.prenom = prenom;
 		this.telephone = telephone;
 		this.adresse = adresse;
+		this.mdp = mdp;
 		
 	}
 	
-	public Client(String date_naissance,String nom,String prenom,String email,String telephone,int clientID,String adresse){
+	public Client(String date_naissance,String nom,String prenom,String email,String telephone,int clientID,String adresse,String mdp){
 		
 		this.clientID = clientID;
 		this.date_naissance = date_naissance;
@@ -39,9 +41,14 @@ public class Client {
 		this.prenom = prenom;
 		this.telephone = telephone;
 		this.adresse = adresse;
+		this.mdp = mdp;
 	}
 
 
+	public String getmdp(){
+		return mdp;
+	}
+	
 	public int getClientID() {
 		return clientID;
 	}
@@ -109,6 +116,10 @@ public class Client {
 
 	public void setClientID(int id) {
 		this.clientID= id;
+	}
+	
+	public void setmdp(String mdp){
+		this.mdp = mdp;
 	}
 	
 	public String afficherDetails() {

@@ -16,12 +16,12 @@ public class Produit {
     private int quantite_stock;
     private ImageIcon image;
     
-    
     public Produit() {
     	this.id = DBToproduit.getMaxProduitID() + 1;   
     }
     
     
+
     public Produit(String marque, String modele, double prix, String type,String description,int quantite_stock,ImageIcon image){
     	
         this.id = DBToproduit.getMaxProduitID() + 1;   
@@ -36,7 +36,6 @@ public class Produit {
     }
     
    public Produit(int id, String marque, String modele, double prix, String type,String description,int quantite_stock,ImageIcon image){
-    	
         this.id = id;   
         this.marque = marque ;
         this.modele = modele;
@@ -49,7 +48,7 @@ public class Produit {
     }
 
 
-	    public ImageIcon getImage() {
+    public ImageIcon getImage() {
 		return image;
 	}
 	
@@ -132,7 +131,6 @@ public class Produit {
 	public void setQuantite_stock(int quantite_stock) {
 		this.quantite_stock = quantite_stock;
 	}
-
 
 	// Méthode pour vérifier la disponibilité du produit
     public boolean estDisponible(int quantite) {

@@ -42,7 +42,6 @@ public class Shop extends JFrame {
         for (Produit product : my_products) {
             JPanel panel = createProductPanel(product);
             productPanel.add(panel);
-            listModel.add(product.getId(),product.getModele());
         }
         
         JScrollPane scrollPane = new JScrollPane(productPanel);

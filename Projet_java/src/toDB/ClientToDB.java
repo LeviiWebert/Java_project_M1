@@ -16,7 +16,7 @@ import service.DateBDD;
 public class ClientToDB {
 	
 	public static void addCustomer(Client client) {
-        String query = "INSERT INTO client (date_naissance, nom, prenom, email, telephone, adresse) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO client (date_naissance, nom, prenom, email, telephone, adresse, mdp) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection connection = DBconnection.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
@@ -30,6 +30,8 @@ public class ClientToDB {
                 preparedStatement.setString(4, client.getEmail());
                 preparedStatement.setString(5, client.getTelephone());
                 preparedStatement.setString(6, client.getAdresse());
+                preparedStatement.setString(7, client.getmdp());
+
 
                 // Exécuter l'insertion
                 int affectedRows = preparedStatement.executeUpdate();
@@ -80,7 +82,7 @@ public class ClientToDB {
 	 
 	 
 	 public static void updateClient(Client client) {
-		    String query = "UPDATE client SET date_naissance = ?, nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ? WHERE clientID = ?";
+		    String query = "UPDATE client SET date_naissance = ?, nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ?, mdp = ? WHERE clientID = ?";
 		    try (Connection connection = DBconnection.getConnection();
 		         PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
@@ -93,7 +95,10 @@ public class ClientToDB {
 				preparedStatement.setString(4, client.getEmail());
 				preparedStatement.setString(5, client.getTelephone());
 				preparedStatement.setString(6, client.getAdresse());
-				preparedStatement.setInt(7, client.getClientID()); // Le WHERE se base sur le clientID
+				preparedStatement.setString(7, client.getmdp());
+				preparedStatement.setInt(8, client.getClientID()); // Le WHERE se base sur le clientID
+				                                                   // Le WHERE se base sur le clientID
+
 
 				// Exécuter la mise à jour
 				int affectedRows = preparedStatement.executeUpdate();
@@ -107,12 +112,14 @@ public class ClientToDB {
 		        e.printStackTrace();
 		    }
 		}
+	 
+	 
 
 	
 	
 	
 	public static void main(String[] args) {
-		Client t = new Client(new DateBDD(2002,04,18).getDateBDD(),"Webert","Levi","leviwebert147@gmail.com","0651159650","6 avenue François Mitterand");
+		Client t = new Client(new DateBDD(2002,04,18).getDateBDD(),"Webert","Levi","leviwebert147@gmail.com","0651159650","6 avenue François Mitterand","levv");
 		addCustomer(t);
 		
 	

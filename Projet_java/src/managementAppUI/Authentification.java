@@ -65,6 +65,7 @@ public class Authentification extends JFrame {
     }
 
     private void showMainWindow() {
+    	
         JFrame mainFrame = new JFrame();
         mainFrame.setSize(1000, 700);
         mainFrame.setTitle(" Shop Management");
