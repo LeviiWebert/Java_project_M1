@@ -7,77 +7,66 @@ import java.awt.event.ActionListener;
 
 public class Authentification extends JFrame {
 
-    private JTextField idField;
-    private JPasswordField mdpField;
+	private JTextField idField;
+	private JPasswordField mdpField;
 
-    public Authentification() {
-     
-        setTitle("Authentification");
-        setSize(400, 150);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
+	public Authentification() {
 
-   
-        JLabel idLabel = new JLabel("Login:");
-        JLabel mdpLabel = new JLabel("Password:");
+		setTitle("Authentification");
+		setSize(400, 150);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 
-        idField = new JTextField(10);
-        mdpField = new JPasswordField(10);
+		JLabel idLabel = new JLabel("Login:");
+		JLabel mdpLabel = new JLabel("Password:");
 
-        JButton loginButton = new JButton("Log in");
+		idField = new JTextField(10);
+		mdpField = new JPasswordField(10);
 
-   
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String id = idField.getText();
-                char[] mdpc = mdpField.getPassword();
-                String mdp = new String(mdpc);
+		JButton loginButton = new JButton("Log in");
 
-           
-                if (id.equals("admin") && mdp.equals("admin")) {
-                    JOptionPane.showMessageDialog(Authentification.this, "Approved Connection.\nClick OK to continue.");
-                    dispose(); 
+		loginButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String id = idField.getText();
+				char[] mdpc = mdpField.getPassword();
+				String mdp = new String(mdpc);
 
-                    
-                    showMainWindow();
-                } else {
-                    JOptionPane.showMessageDialog(Authentification.this, "Incorrect identifiers. Please try again\r\n"
-                    		+ "\r\n"
-                    		+ ".", "Identification error\r\n"
-                    				+ "\r\n"
-                    				+ ".", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
+				if (id.equals("admin") && mdp.equals("admin")) {
+					JOptionPane.showMessageDialog(Authentification.this, "Approved Connection.\nClick OK to continue.");
+					dispose();
 
-    
-        setLayout(new GridLayout(3, 2));
+					showMainWindow();
+				} else {
+					JOptionPane.showMessageDialog(Authentification.this,
+							"Incorrect identifiers. Please try again\r\n" + "\r\n" + ".",
+							"Identification error\r\n" + "\r\n" + ".", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
 
-      
-        add(idLabel);
-        add(idField);
-        add(mdpLabel);
-        add(mdpField);
-        add(new JLabel()); 
-        add(loginButton);
-    }
+		setLayout(new GridLayout(3, 2));
 
-    private void showMainWindow() {
-    	
-        JFrame mainFrame = new JFrame();
-        mainFrame.setSize(1000, 700);
-        mainFrame.setTitle(" Shop Management");
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		add(idLabel);
+		add(idField);
+		add(mdpLabel);
+		add(mdpField);
+		add(new JLabel());
+		add(loginButton);
+	}
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+	private void showMainWindow() {
 
-        mainFrame.add(tabbedPane);
-        mainFrame.setVisible(true);
-        
-        
-        
-    }
+		JFrame mainFrame = new JFrame();
+		mainFrame.setSize(1000, 700);
+		mainFrame.setTitle(" Shop Management");
+		mainFrame.setLocationRelativeTo(null);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JTabbedPane tabbedPane = new JTabbedPane();
+
+		mainFrame.add(tabbedPane);
+		mainFrame.setVisible(true);
+
+	}
 }
