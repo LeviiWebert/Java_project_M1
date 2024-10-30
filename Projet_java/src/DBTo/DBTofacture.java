@@ -109,49 +109,6 @@ public class DBTofacture {
 
 	    return factures; // Retourner la liste des factures
 	}
-
-
-	
-	
-	    public static void main(String[] args) throws SQLException {
-	        // ID de la facture à tester
-	        int factureIdToTest = 1; // Remplacez par l'ID de la facture que vous voulez tester
-
-			System.out.println(DBTofacture.getMaxIdFacture());
-
-	        // Récupérer la facture par ID
-			Facture facture = DBTofacture.getFactureById(factureIdToTest);
-			
-			// Afficher les détails de la facture
-			if (facture != null) {
-			    System.out.println("Facture ID: " + facture.getId());
-			    System.out.println("Commande ID: " + facture.getCommande().getId());
-			    System.out.println("Date de Facture: " + facture.getDateFacture());
-			    System.out.println("Montant: " + facture.getMontant());
-			} else {
-			    System.out.println("Aucune facture trouvée avec l'ID : " + factureIdToTest);
-			}
-			
-			  DBTofacture dbToFacture = new DBTofacture();
-
-		        // Récupérer toutes les factures
-		        List<Facture> factures = dbToFacture.getToutesLesFactures();
-
-		        // Vérifier si des factures ont été récupérées
-		        if (factures.isEmpty()) {
-		            System.out.println("Aucune facture trouvée.");
-		        } else {
-		            // Afficher les détails des factures
-		            System.out.println("Liste des factures :");
-		            for (Facture facture1 : factures) {
-		                System.out.println("ID Facture: " + facture1.getId());
-		                System.out.println("Commande ID: " + facture1.getCommande().getId());
-		                System.out.println("Date de Facture: " + facture1.getDateFacture());
-		                System.out.println("Montant: " + facture1.getMontant());
-		                System.out.println("-------------------------------------");
-		            }
-		        }
-	    }
 	
 
 	}

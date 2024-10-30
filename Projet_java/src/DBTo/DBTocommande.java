@@ -34,49 +34,6 @@ public class DBTocommande {
 
         return maxID;  // Retourne l'identifiant de commande maximum
     }
-	
-//	public static Commande getCommandeById(int commandeId) {
-//	    Commande commande = null;
-//
-//	    try (Connection connection = DBconnection.getConnection()) {
-//	        String queryCommande = "SELECT * FROM commande WHERE id = ?";
-//	        try (PreparedStatement preparedStatement = connection.prepareStatement(queryCommande)) {
-//	            preparedStatement.setInt(1, commandeId);
-//	            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-//	                if (resultSet.next()) {
-//	                    int clientId = resultSet.getInt("clientId");
-//	                    Date dateCommande = resultSet.getDate("dateCommande");
-//	                    String etat = resultSet.getString("etat");
-//	                    double total = resultSet.getDouble("total");
-//
-//	                    // Créer l'instance de commande
-//	                    commande = new Commande(commandeId, clientId, dateCommande, etat, new ArrayList<>(), total);
-//
-//	                    // Récupérer les lignes de commande associées
-//	                    String queryLigneCommande = "SELECT * FROM ligne_commande WHERE commande_id = ?";
-//	                    try (PreparedStatement preparedStatementLigne = connection.prepareStatement(queryLigneCommande)) {
-//	                        preparedStatementLigne.setInt(1, commandeId);
-//	                        try (ResultSet resultSetLigne = preparedStatementLigne.executeQuery()) {
-//	                            while (resultSetLigne.next()) {
-//	                                int produit = resultSetLigne.getInt("produit");
-//	                                
-//	                                int quantite = resultSetLigne.getInt("quantite");
-//	                                double prixUnitaire = resultSetLigne.getDouble("prix_unitaire");
-//
-//	                                LigneCommande ligneCommande = new LigneCommande(produitId, quantite, prixUnitaire);
-//	                                commande.getLignes().add(ligneCommande); // Ajouter à la commande
-//	                            }
-//	                        }
-//	                    }
-//	                }
-//	            }
-//	        }
-//	    } catch (SQLException e) {
-//	        e.printStackTrace();
-//	    }
-//
-//	    return commande;
-//	}
 
 	
 	public static Commande getCommandeById(int commandeId) {
