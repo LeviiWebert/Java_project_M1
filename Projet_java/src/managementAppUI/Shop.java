@@ -35,6 +35,7 @@ public class Shop extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(173, 216, 230));
 
         JPanel productPanel = new JPanel();
         productPanel.setLayout(new GridLayout(0, 2));  // Affichage vertical des produits
@@ -43,6 +44,7 @@ public class Shop extends JFrame {
             JPanel panel = createProductPanel(product);
             productPanel.add(panel);
         }
+        productPanel.setBackground(new Color(173, 216, 230));
         
         JScrollPane scrollPane = new JScrollPane(productPanel);
 
@@ -54,7 +56,7 @@ public class Shop extends JFrame {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                searchProducts();
+                searchProducts(productPanel);
             }
         });
 
@@ -103,22 +105,35 @@ public class Shop extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // Search products based on the search field input
-    private void searchProducts() {
-        String searchTerm = searchField.getText().toLowerCase();
-        listModel.clear();
+    private void searchProducts(JPanel panel) {
+        String searchTerm = searchField.getText().toLowerCase().trim(); 
+        panel.removeAll(); 
+
+        
+        if (searchTerm.isEmpty()) {
+            panel.revalidate(); 
+            panel.repaint();
+            return;
+        }
+
         for (Produit product : my_products) {
-            if (product.getMarque().toLowerCase().contains(searchTerm) || product.getModele().toLowerCase().contains(searchTerm)) {
-                listModel.addElement(product.getModele());
+            if (product.getMarque().toLowerCase().contains(searchTerm) || 
+                product.getModele().toLowerCase().contains(searchTerm) || 
+                product.getType().toLowerCase().contains(searchTerm)) {
+                JPanel productPanel = createProductPanel(product);
+                panel.add(productPanel);
             }
         }
+
+        panel.revalidate();
+        panel.repaint();
     }
 
     
 
     private void viewOrders() {
-        AccueilClient accueilClient = new AccueilClient(client_id);
-        accueilClient.setVisible(true);
+        Orders orders = new Orders(client_id);
+        orders.setVisible(true);
         this.dispose();
     }
 
@@ -133,6 +148,7 @@ public class Shop extends JFrame {
     // Créer un panel pour chaque produit avec un bouton pour afficher les détails et ajouter au panier
     private JPanel createProductPanel(Produit product) {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(173, 216, 230));
 
         ImageIcon icon = new ImageIcon(product.getImage().getImage());
         Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Redimensionner à 100x100 pixels

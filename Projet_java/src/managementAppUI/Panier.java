@@ -26,6 +26,7 @@ public class Panier extends JFrame {
         setTitle("Panier");
         setSize(600, 400);
         setLayout(new BorderLayout());
+        getContentPane().setBackground(new Color(173, 216, 230));
 
         JPanel cartPanel = new JPanel();
         cartPanel.setLayout(new GridLayout(0, 1));
@@ -108,44 +109,56 @@ public class Panier extends JFrame {
         factureDialog.setLayout(new BorderLayout());
         factureDialog.getContentPane().setBackground(Color.LIGHT_GRAY); // Fond de la fenêtre
 
-        // Titre de la facture
-        JLabel titleLabel = new JLabel("Facture #" + facture.getId(), SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setForeground(Color.BLACK);
-        factureDialog.add(titleLabel, BorderLayout.NORTH);
+        if (facture == null) {
+            JOptionPane.showMessageDialog(factureDialog, "La facture n'existe pas", "Erreur", JOptionPane.ERROR_MESSAGE);
+            factureDialog.dispose(); // Fermer le dialogue si la facture n'existe pas
+            return;
+        } else {
+            // Titre de la facture
+            JLabel titleLabel = new JLabel("Facture #" + facture.getId(), SwingConstants.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+            titleLabel.setForeground(Color.BLACK);
+            factureDialog.add(titleLabel, BorderLayout.NORTH);
 
-        // Panel pour afficher les détails de la facture
-        JPanel detailsPanel = new JPanel();
-        detailsPanel.setLayout(new GridLayout(0, 1));
-        detailsPanel.setBackground(Color.WHITE); // Fond blanc pour les détails
+            // Panel pour afficher les détails de la facture
+            JPanel detailsPanel = new JPanel();
+            detailsPanel.setLayout(new GridLayout(0, 1));
+            detailsPanel.setBackground(Color.WHITE); // Fond blanc pour les détails
 
-        // Ajouter les détails des lignes de commande
-        for (LigneCommande ligne : facture.getCommande().getLignes()) {
-            Produit produit = ligne.getProduit();
-            int quantite = ligne.getQuantite();
-            double prix = produit.getPrix();
+            // Ajouter les détails des lignes de commande
+            for (LigneCommande ligne : facture.getCommande().getLignes()) {
+                Produit produit = ligne.getProduit();
+                int quantite = ligne.getQuantite();
+                double prix = produit.getPrix();
 
-            // Ajouter une ligne avec les détails du produit
-            String details = String.format("%s %s - Quantité: %d - Prix: %.2f€", 
-                produit.getMarque(), produit.getModele(), quantite, prix);
-            JLabel detailLabel = new JLabel(details);
-            detailLabel.setForeground(Color.BLACK);
-            detailsPanel.add(detailLabel);
+                // Ajouter une ligne avec les détails du produit
+                String details = String.format("%s %s - Quantité: %d - Prix: %.2f€",
+                        produit.getMarque(), produit.getModele(), quantite, prix);
+                JLabel detailLabel = new JLabel(details);
+                detailLabel.setForeground(Color.BLACK);
+                detailsPanel.add(detailLabel);
+            }
+
+            // Ajouter le total de la facture
+            JLabel totalLabel = new JLabel("Total: " + facture.getMontant() + "€", SwingConstants.CENTER);
+            totalLabel.setFont(new Font("Arial", Font.BOLD, 16));
+            totalLabel.setForeground(Color.RED);
+            detailsPanel.add(totalLabel);
+
+            factureDialog.add(detailsPanel, BorderLayout.CENTER);
+
+            // Bouton de fermeture
+            JButton closeButton = new JButton("Fermer");
+            closeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    factureDialog.dispose();
+                }
+            });
+            factureDialog.add(closeButton, BorderLayout.SOUTH);
         }
 
-        // Ajouter le panel des détails à la fenêtre
-        JScrollPane scrollPane = new JScrollPane(detailsPanel);
-        factureDialog.add(scrollPane, BorderLayout.CENTER);
-
-        // Bouton de fermeture
-        JButton closeButton = new JButton("Fermer");
-        closeButton.setBackground(Color.RED);
-        closeButton.setForeground(Color.WHITE);
-        closeButton.addActionListener(e -> factureDialog.dispose());
-        factureDialog.add(closeButton, BorderLayout.SOUTH);
-
-        // Afficher la fenêtre de la facture
-        factureDialog.setLocationRelativeTo(this);
+        // Afficher le dialogue
         factureDialog.setVisible(true);
     }
 

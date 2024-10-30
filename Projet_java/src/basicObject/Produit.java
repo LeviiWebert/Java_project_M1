@@ -167,7 +167,7 @@ public class Produit {
         StringBuffer details = new StringBuffer();
         
     
-        details.append(" Produit ID: ").append(getId()).append("\n");
+        details.append(" Référence: ").append(getId()).append("\n");
         details.append("   -Marque: ").append(getMarque()).append("\n");
         details.append("   -Modèle: ").append(getModele()).append("\n");
         details.append("   -Prix: ").append(getPrix()).append(" €\n");
