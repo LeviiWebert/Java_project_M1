@@ -33,7 +33,9 @@ public class Panier extends JFrame {
 
         for (Produit Produit : cart) {
             JPanel panel = new JPanel(new BorderLayout());
-            JLabel imageLabel = new JLabel(Produit.getImage());
+            ImageIcon icon = new ImageIcon(Produit.getImage().getImage());
+            Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Redimensionner à 100x100 pixels
+            JLabel imageLabel = new JLabel(new ImageIcon(img)); 
             JLabel detailsLabel = new JLabel("<html>" + Produit.getMarque() + "<br>" + Produit.getPrix() + "€</html>");
             panel.add(imageLabel, BorderLayout.WEST);
             panel.add(detailsLabel, BorderLayout.CENTER);
