@@ -181,7 +181,11 @@ public class AuthentificationClient extends JFrame {
 
             if (enteredPassword.equals(storedPassword)) {
                 JOptionPane.showMessageDialog(this, "Authentification réussie pour le client: " + selectedClient.getNom());
-                new Shop(selectedClient.getClientID()).setVisible(true);
+                // Initialisation de la fenêtre Shop avec l'ID du client
+                SwingUtilities.invokeLater(() -> {
+                    new Shop(selectedClient.getClientID()).setVisible(true);
+                });
+                
                 dispose(); // Fermer la fenêtre actuelle
             } else {
                 JOptionPane.showMessageDialog(this, "Mot de passe incorrect. Veuillez réessayer.");

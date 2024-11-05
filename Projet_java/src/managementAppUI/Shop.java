@@ -3,11 +3,13 @@ package managementAppUI;
 import basicObject.Client;
 import basicObject.Commande;
 import basicObject.Produit;
+import service.LoadingServiceUI;
 import toDB.CommandeToDB;
 import DBTo.DBToproduit;
 import DBTo.DBToclient;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.desktop.ScreenSleepEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -24,8 +26,13 @@ public class Shop extends JFrame {
     private List<Produit> panier;
 
     public Shop(int client_id) {
+    	// Afficher le dialogue de chargement pendant le chargement des produits
+        LoadingServiceUI loadingService = new LoadingServiceUI();
+        loadingService.showLoadingDialog(this);
     	listModel = new DefaultListModel<String>();
         this.client_id = client_id;
+        
+        // On revient sur la procèdure d'affichage
         my_products = DBToproduit.getproduit();
         Client client = (Client) DBToclient.getClientByID(client_id);
         this.panier = new ArrayList<Produit>();
@@ -36,6 +43,8 @@ public class Shop extends JFrame {
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(173, 216, 230));
+        
+    
 
         JPanel productPanel = new JPanel();
         productPanel.setLayout(new GridLayout(0, 2));  // Affichage vertical des produits
@@ -47,6 +56,9 @@ public class Shop extends JFrame {
         productPanel.setBackground(new Color(173, 216, 230));
         
         JScrollPane scrollPane = new JScrollPane(productPanel);
+        
+        // On cache la fenêtre de chargement
+        loadingService.hideLoadingDialog();
 
         
         // Create the search panel
@@ -190,9 +202,9 @@ public class Shop extends JFrame {
         new Panier(panier,client_id).setVisible(true);;
     }
     
-    public static void main(String[] args) {
-        // Create and show the shop
-        Shop shop = new Shop(1); // Assuming client_id is 1 for testing
-        shop.setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        // Create and show the shop
+//        Shop shop = new Shop(1); // Assuming client_id is 1 for testing
+//        shop.setVisible(true);
+//    }
 }
