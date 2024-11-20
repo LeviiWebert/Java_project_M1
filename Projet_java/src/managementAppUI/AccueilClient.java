@@ -1,6 +1,9 @@
 package managementAppUI;
 
 import javax.swing.*;
+
+import service.LoadingServiceUI;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -67,7 +70,9 @@ public class AccueilClient extends JFrame {
 
     // Open the shop window
     private void openShop() {
-        Shop shop = new Shop(client_id);
+    	LoadingServiceUI loadingService = new LoadingServiceUI();
+        loadingService.showLoadingDialog(this);
+        Shop shop = new Shop(client_id,loadingService);
         shop.setVisible(true);
         this.dispose();
     }

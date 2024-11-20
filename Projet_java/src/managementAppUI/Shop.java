@@ -25,15 +25,16 @@ public class Shop extends JFrame {
     private int client_id;
     private List<Produit> panier;
 
-    public Shop(int client_id) {
+    public Shop(int client_id, LoadingServiceUI loadingService) {
     	// Afficher le dialogue de chargement pendant le chargement des produits
-        LoadingServiceUI loadingService = new LoadingServiceUI();
-        loadingService.showLoadingDialog(this);
+        
     	listModel = new DefaultListModel<String>();
         this.client_id = client_id;
         
         // On revient sur la procèdure d'affichage
         my_products = DBToproduit.getproduit();
+        // On cache la fenêtre de chargement
+        loadingService.hideLoadingDialog();
         Client client = (Client) DBToclient.getClientByID(client_id);
         this.panier = new ArrayList<Produit>();
 
@@ -56,9 +57,6 @@ public class Shop extends JFrame {
         productPanel.setBackground(new Color(173, 216, 230));
         
         JScrollPane scrollPane = new JScrollPane(productPanel);
-        
-        // On cache la fenêtre de chargement
-        loadingService.hideLoadingDialog();
 
         
         // Create the search panel

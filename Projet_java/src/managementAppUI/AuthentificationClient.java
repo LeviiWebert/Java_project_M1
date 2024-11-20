@@ -1,6 +1,7 @@
 package managementAppUI;
 
 import basicObject.Client;
+import service.LoadingServiceUI;
 import toDB.ClientToDB;
 import DBTo.DBToclient;
 
@@ -181,9 +182,11 @@ public class AuthentificationClient extends JFrame {
 
             if (enteredPassword.equals(storedPassword)) {
                 JOptionPane.showMessageDialog(this, "Authentification réussie pour le client: " + selectedClient.getNom());
+                LoadingServiceUI loadingService = new LoadingServiceUI();
+                loadingService.showLoadingDialog(this);
                 // Initialisation de la fenêtre Shop avec l'ID du client
                 SwingUtilities.invokeLater(() -> {
-                    new Shop(selectedClient.getClientID()).setVisible(true);
+                    new Shop(selectedClient.getClientID(),loadingService).setVisible(true);
                 });
                 
                 dispose(); // Fermer la fenêtre actuelle

@@ -19,8 +19,9 @@ import java.io.FileNotFoundException;
 
 public class Panier extends JFrame {
     private List<Produit> cart;
+    private JPanel cartPanel;
 
-    public Panier(List<Produit> cart,int clientId) {
+    public Panier(List<Produit> cart, int clientId) {
         this.cart = cart;
 
         setTitle("Panier");
@@ -28,19 +29,10 @@ public class Panier extends JFrame {
         setLayout(new BorderLayout());
         getContentPane().setBackground(new Color(173, 216, 230));
 
-        JPanel cartPanel = new JPanel();
+        cartPanel = new JPanel();
         cartPanel.setLayout(new GridLayout(0, 1));
 
-        for (Produit Produit : cart) {
-            JPanel panel = new JPanel(new BorderLayout());
-            ImageIcon icon = new ImageIcon(Produit.getImage().getImage());
-            Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH); // Redimensionner à 100x100 pixels
-            JLabel imageLabel = new JLabel(new ImageIcon(img)); 
-            JLabel detailsLabel = new JLabel("<html>" + Produit.getMarque() + "<br>" + Produit.getPrix() + "€</html>");
-            panel.add(imageLabel, BorderLayout.WEST);
-            panel.add(detailsLabel, BorderLayout.CENTER);
-            cartPanel.add(panel);
-        }
+        updateCartPanel();
 
         JScrollPane scrollPane = new JScrollPane(cartPanel);
         add(scrollPane, BorderLayout.CENTER);
@@ -48,18 +40,55 @@ public class Panier extends JFrame {
         // Bouton pour passer la commande
         JButton checkoutButton = new JButton("Passer la commande");
         checkoutButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				passerCommande(clientId);
-                cart.clear();  // Vide le panier après la commande
-                dispose();
-				
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int response = JOptionPane.showConfirmDialog(
+                        Panier.this,
+                        "Êtes-vous sûr de vouloir passer la commande ?",
+                        "Confirmation de commande",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (response == JOptionPane.YES_OPTION) {
+                    passerCommande(clientId);
+                    cart.clear(); // Vide le panier après la commande
+                    dispose();
+                }
+            }
+        });
         add(checkoutButton, BorderLayout.SOUTH);
     }
-    
+
+    private void updateCartPanel() {
+        cartPanel.removeAll();
+
+        for (Produit produit : cart) {
+            JPanel panel = new JPanel(new BorderLayout());
+            ImageIcon icon = new ImageIcon(produit.getImage().getImage());
+            Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            JLabel imageLabel = new JLabel(new ImageIcon(img));
+            JLabel detailsLabel = new JLabel("<html>" + produit.getMarque() + "<br>" + produit.getPrix() + "€</html>");
+
+            JButton removeButton = new JButton("Supprimer");
+            removeButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    cart.remove(produit);
+                    updateCartPanel();
+                }
+            });
+
+            panel.add(imageLabel, BorderLayout.WEST);
+            panel.add(detailsLabel, BorderLayout.CENTER);
+            panel.add(removeButton, BorderLayout.EAST);
+            cartPanel.add(panel);
+        }
+
+        cartPanel.revalidate();
+        cartPanel.repaint();
+    }
+
     private void passerCommande(int clientId) {
         if (cart.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Votre panier est vide.");
@@ -84,14 +113,14 @@ public class Panier extends JFrame {
         Facture facture = new Facture(commande);
         facture.setDateFacture(LocalDate.now());
         facture.setMontant(montantTotal);
-        FactureToDB.addFacture(facture); 
+        FactureToDB.addFacture(facture);
 
         // Afficher un message de confirmation avec un bouton pour télécharger le PDF
         JOptionPane.showMessageDialog(this, "Commande passée avec succès ! Vous pouvez voir la facture.");
         JButton downloadButton = new JButton("Afficher la facture");
 
         downloadButton.addActionListener(e -> {
-        	afficherFacture(facture);
+            afficherFacture(facture);
         });
 
         // Fenêtre de confirmation avec téléchargement de facture
@@ -163,8 +192,4 @@ public class Panier extends JFrame {
         // Afficher le dialogue
         factureDialog.setVisible(true);
     }
-
-    
-   
-
 }
