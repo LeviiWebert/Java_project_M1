@@ -35,14 +35,15 @@ public class Commande {
         this.etat = "en cours";          // État initial
         this.lignes = new ArrayList<>(); // Initialiser la liste des lignes de commande
         this.total =  calculerTotal();   // Montant total
+        
     }
     
-public Commande(int id, int clientId) {
+    public Commande(int id, int clientId) {
     	
     	this.id  = id;
         this.clientId = clientId;
         this.dateCommande = new Date();  // Date actuelle
-        this.etat = "en cours";          // État initial
+        this.etat = "validée";          // État initial
         this.lignes = new ArrayList<>(); // Initialiser la liste des lignes de commande
         this.total =  calculerTotal();   // Montant total
     }
@@ -53,7 +54,7 @@ public Commande(int id, int clientId) {
     	this.id  = DBTocommande.getMaxIdCommande() + 1;
         this.clientId = clientId;
         this.dateCommande = (dateCommande != null) ? dateCommande : new Date(); // Date actuelle par défaut si non fournie
-        this.etat = (etat != null && !etat.isEmpty()) ? etat : "en cours"; // État par défaut "en_cours" si non fourni
+        this.etat = (etat != null && !etat.isEmpty()) ? etat : "validée"; // État par défaut "en_cours" si non fourni
         this.lignes = (lignes != null) ? lignes : new ArrayList<>();  // Initialiser la liste des lignes, vide si null
         this.total = calculerTotal();  // Calculer automatiquement le total en fonction des lignes de commande
         
@@ -64,7 +65,7 @@ public Commande(int id, int clientId) {
     	this.id  = id;
         this.clientId = clientId;
         this.dateCommande = (dateCommande != null) ? dateCommande : new Date(); // Date actuelle par défaut si non fournie
-        this.etat = (etat != null && !etat.isEmpty()) ? etat : "en cours"; // État par défaut "en_cours" si non fourni
+        this.etat = (etat != null && !etat.isEmpty()) ? etat : "validée"; // État par défaut "en_cours" si non fourni
         this.lignes = (lignes != null) ? lignes : new ArrayList<>();  // Initialiser la liste des lignes, vide si null
         this.total = calculerTotal();  // Calculer automatiquement le total en fonction des lignes de commande
         this.total = total;
@@ -194,14 +195,7 @@ public Commande(int id, int clientId) {
 		
 		return produitsMap;
 	}
-//	public Facture getFacture() {
-//	    for (Facture facture : DBTofacture.getToutesLesFactures()) {
-//	        if (facture.getCommande().equals(this)) {
-//	            return facture;
-//	        }
-//	    }
-//	    return null; // Retourne null si aucune facture n'est trouvée
-//	}
+
 	
 	public Facture getFacture() {
 	    System.out.println("Recherche de la facture pour la commande : " + this.getId());

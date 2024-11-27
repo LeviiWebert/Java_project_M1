@@ -13,6 +13,9 @@ import service.DBconnection;
 
 public class DBToclient {
 
+	
+	
+	
 	public static int getMaxClientID() {
 		int maxID = 0;
 		try (Connection connection = DBconnection.getConnection()) {
@@ -34,6 +37,11 @@ public class DBToclient {
 		return maxID;
 	}
 
+	
+	
+	
+	
+	
 	public static List<Client> getClients() {
 		List<Client> clients = new ArrayList(); // Renommé de "Client" à "clients"
 
@@ -66,6 +74,11 @@ public class DBToclient {
 
 		return clients; // Retourne la liste des clients
 	}
+	
+	
+	
+	
+	
 
 	public static Client getClientByID(int id_client) {
 		Client client = null; // Initialiser à null
@@ -98,6 +111,11 @@ public class DBToclient {
 
 		return client; // Retourne l'objet Client ou null si non trouvé
 	}
+	
+	
+	
+	
+	
 
 	public static List<Commande> getCommandesByClientID(int clientID) {
 		List<Commande> commandes = new ArrayList(); // Liste des commandes
@@ -131,6 +149,10 @@ public class DBToclient {
 		return commandes; // Retourne la liste des commandes
 	}
 
+	
+	
+	
+	
 	public static String getClientPassword(int clientID) {
 		String password = null;
 		String query = "SELECT mdp FROM client WHERE clientID = ?";

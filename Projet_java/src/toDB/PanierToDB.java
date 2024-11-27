@@ -10,6 +10,9 @@ import service.DBconnection;
 import basicObject.LigneCommande;
 
 public class PanierToDB {
+	
+	
+	
 
 	public static void addPanier(Panier panier) {
 		String queryPanier = "INSERT INTO panier (clientId, total) VALUES (?, ?)";
@@ -59,6 +62,10 @@ public class PanierToDB {
 		}
 	}
 
+	
+	
+	
+	
 	public static void deletePanier(int panierId) {
 		String queryLigneCommande = "DELETE FROM ligne_commande_panier WHERE panierID = ?";
 		String queryPanier = "DELETE FROM panier WHERE id = ?";
@@ -90,4 +97,7 @@ public class PanierToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 }

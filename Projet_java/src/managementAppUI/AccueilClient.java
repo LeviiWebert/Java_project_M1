@@ -92,7 +92,7 @@ public class AccueilClient extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Create and show the AccueilClient
+        // Create and show the Ac	²cueilClient
         AccueilClient accueilClient = new AccueilClient(1); // Assuming client_id is 1 for testing
         accueilClient.setVisible(true);
     }

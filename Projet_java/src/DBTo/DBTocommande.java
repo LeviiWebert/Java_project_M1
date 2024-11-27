@@ -13,6 +13,10 @@ import basicObject.Produit;
 import service.DBconnection;
 
 public class DBTocommande {
+	
+	
+	
+	
 
 	public static int getMaxIdCommande() {
 		int maxID = 0;
@@ -32,6 +36,11 @@ public class DBTocommande {
 
         return maxID;  // Retourne l'identifiant de commande maximum
     }
+	
+	
+	
+	
+	
 
 	public static Commande getCommandeById(int commandeId) {
 		Commande commande = null;
@@ -61,7 +70,6 @@ public class DBTocommande {
 									int produit_id = resultSetLigne.getInt("produit_id");
 									int quantite = resultSetLigne.getInt("quantite");
 									double prix_unitaire = resultSetLigne.getDouble("prix_unitaire");
-									// System.out.println("saluuuuut");
 
 									// Récupérer le produit correspondant à produitId
 									Produit produit = DBToproduit.getProduitByid(produit_id); // Méthode à implémenter
@@ -84,26 +92,5 @@ public class DBTocommande {
 		return commande;
 	}
 
-	public static void main(String[] args) {
-		// Simulons un ID de commande à rechercher
-		int commandeId = 10;
-
-		// Appel de la méthode pour récupérer la commande
-		Commande commande = getCommandeById(commandeId);
-
-		// Afficher les détails de la commande
-		if (commande != null) {
-			System.out.println("Commande récupérée :");
-			System.out.println(commande.toString());
-			// System.out.println(commande.getLignes());
-			System.out.println("Lignes de commande :");
-			for (LigneCommande ligne : commande.getLignes()) {
-				// System.out.println("salut");
-				System.out.println(ligne.toString());
-			}
-		} else {
-			System.out.println("Aucune commande trouvée avec l'ID " + commandeId);
-		}
-	}
 
 }

@@ -22,6 +22,10 @@ import service.DBconnection;
 
 public class DBTofacture {
 	
+	
+	
+	
+	
 	public static int getMaxIdFacture() {
 	    int maxID = 0;
 
@@ -42,6 +46,10 @@ public class DBTofacture {
 
 	    return maxID;  // Retourne l'identifiant maximum
 	}
+	
+	
+	
+	
 	
 	
 	public static Facture getFactureById(int factureId) {
@@ -77,6 +85,11 @@ public class DBTofacture {
 	    return facture;  // Retourner la facture trouvée (ou null si aucune facture n'a été trouvée)
 	}
 	
+	
+	
+	
+	
+	
 	public static List<Facture> getToutesLesFactures() {
 	    List<Facture> factures = new ArrayList<>();
 
@@ -109,6 +122,10 @@ public class DBTofacture {
 
 	    return factures; // Retourner la liste des factures
 	}
+	
+	
+	
+	
 	
 
 	}

@@ -28,4 +28,5 @@ public class DateUtils {
 		// Retourner null si aucun format n'est valide
 		return null;
 	}
+	
 }

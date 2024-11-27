@@ -12,6 +12,7 @@ import javax.swing.JTextArea;
 import basicObject.Produit;
 
 public class DetailsProduit extends JFrame {
+	
     public DetailsProduit(Produit product) {
         setTitle("Détails du Produit");
         setSize(800, 600);

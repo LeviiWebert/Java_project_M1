@@ -10,7 +10,7 @@ import service.DBconnection;
 public class ProduitToDB {
 	
 	
-
+	
     public static void addProduit(Produit produit) {
         String query = "INSERT INTO produit (id, marque, modele ,prix, description, quantite_stock, adr_img) VALUES (?, ?, ?, ?, ?,?,?)";
         
@@ -43,6 +43,11 @@ public class ProduitToDB {
             e.printStackTrace();
         }
     }
+    
+    
+    
+    
+    
 
     public static void deleteProduit(int produitId) {
         String query = "DELETE FROM produit WHERE id = ?";
@@ -68,6 +73,9 @@ public class ProduitToDB {
             e.printStackTrace();
         }
     }
+    
+    
+    
     
     
     // Nouvelle méthode pour mettre à jour un produit

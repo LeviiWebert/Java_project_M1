@@ -85,4 +85,21 @@ public class Facture {
             ligne.afficherDetails();           // Afficher les détails de chaque ligne
         }
     }
+    
+    @Override
+    public String toString() {
+    	
+        StringBuilder details = new StringBuilder();
+        details.append("Facture ID: ").append(id).append("\n");
+        details.append("Date de Facture: ").append(dateFacture).append("\n");
+        details.append("Commande associée: ").append(commande.getId()).append("\n");
+        details.append("Montant Total: ").append(montant).append(" €\n");
+        details.append("Détails de la commande :\n");
+        
+        for (LigneCommande ligne : commande.getLignes()) {
+            details.append(ligne.toString()).append("\n"); // Appel à toString() de LigneCommande
+        }
+        
+        return details.toString();
+    }
 }

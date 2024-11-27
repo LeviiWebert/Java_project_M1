@@ -1,5 +1,8 @@
 package basicObject;
 
+import DBTo.DBTofacture;
+import DBTo.DBTolignecommande;
+
 public class LigneCommande {
 
 	private int id;
@@ -8,7 +11,7 @@ public class LigneCommande {
 	private int quantite;
 
 	public LigneCommande(Commande commande, Produit produit, int quantite) {
-		this.id = id; // relation avec la base de donnes
+        this.id = DBTolignecommande.getMaxLigneCommande() + 1;                           // Initialisation de l'identifiant
 		this.commande = commande;
 		this.produit = produit;
 		this.quantite = quantite;

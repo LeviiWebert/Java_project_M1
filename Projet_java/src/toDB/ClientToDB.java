@@ -13,6 +13,34 @@ import service.DBconnection;
 import service.DateBDD;
 
 public class ClientToDB {
+	
+	
+	public static List<Client> getAllClients() {
+	    List<Client> clients = new ArrayList<>();
+	    try (Connection conn = DBconnection.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM client")) {
+	        ResultSet rs = stmt.executeQuery();
+	        while (rs.next()) {
+	            Client client = new Client();
+	            client.setClientID(rs.getInt("clientID"));
+	            client.setNom(rs.getString("nom"));
+	            client.setPrenom(rs.getString("prenom"));
+	            client.setEmail(rs.getString("email"));
+	            client.setTelephone(rs.getString("telephone"));
+	            client.setAdresse(rs.getString("adresse"));
+	            client.setDate_naissance(rs.getString("date_naissance"));
+	            // Ajouter le client à la liste
+	            clients.add(client);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return clients;
+	}
+
+	
+	
+	
 
 	public static void addCustomer(Client client) {
 		String query = "INSERT INTO client (date_naissance, nom, prenom, email, telephone, adresse, mdp) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -51,6 +79,11 @@ public class ClientToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
+	
 
 	public static void deleteClient(int clientID) {
 		String query = "DELETE FROM client WHERE clientID = ?";
@@ -78,9 +111,14 @@ public class ClientToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 
+	
+	
 	public static void updateClient(Client client) {
-		String query = "UPDATE client SET date_naissance = ?, nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ?, mdp = ? WHERE clientID = ?";
+		String query = "UPDATE client SET date_naissance = ?, nom = ?, prenom = ?, email = ?, telephone = ?, adresse = ? WHERE clientID = ?";
 		try (Connection connection = DBconnection.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
@@ -93,9 +131,7 @@ public class ClientToDB {
 			preparedStatement.setString(4, client.getEmail());
 			preparedStatement.setString(5, client.getTelephone());
 			preparedStatement.setString(6, client.getAdresse());
-			preparedStatement.setString(7, client.getmdp());
-			preparedStatement.setInt(8, client.getClientID()); // Le WHERE se base sur le clientID
-																// Le WHERE se base sur le clientID
+			preparedStatement.setInt(7, client.getClientID()); // Le WHERE se base sur le clientID
 
 			// Exécuter la mise à jour
 			int affectedRows = preparedStatement.executeUpdate();
@@ -109,27 +145,9 @@ public class ClientToDB {
 			e.printStackTrace();
 		}
 	}
-
-	public static void main(String[] args) {
-		Client t = new Client(new DateBDD(2002, 04, 18).getDateBDD(), "Webert", "Levi", "leviwebert147@gmail.com",
-				"0651159650", "6 avenue François Mitterand", "levv");
-		addCustomer(t);
-
-		// Création d'un objet Client avec des valeurs fictives pour tester la mise à
-		// jour
-		Client client = new Client();
-		client.setClientID(4); // ID du client à mettre à jour dans la base de données
-		client.setNom("Dupont");
-		client.setPrenom("Jean");
-		client.setEmail("jean.dupont@example.com");
-		client.setTelephone("0601020304");
-		client.setAdresse("123 Rue de Paris, 75001 Paris");
-		client.setDate_naissance("1990-05-15");
-
-		// Appel de la méthode updateClient pour mettre à jour les informations du
-		// client
-		updateClient(client);
-
-	}
+	
+	
+	
+	
 
 }

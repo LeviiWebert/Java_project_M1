@@ -10,6 +10,10 @@ import basicObject.Produit;
 import service.DBconnection;
 
 public class LigneCommandeToDB {
+	
+	
+	
+	
 
 	public static void addLigneCommande(LigneCommande ligneCommande) {
 		String query = "INSERT INTO lignecommande (commande_id, produit_id, quantite, prix_unitaire) VALUES (?, ?, ?, ?)";
@@ -41,6 +45,10 @@ public class LigneCommandeToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
 
 	public static void deleteLigneCommande(int commandeID, int produitID) {
 		String query = "DELETE FROM ligne_commande WHERE commandeID = ? AND produitID = ?";
@@ -70,4 +78,7 @@ public class LigneCommandeToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
 }

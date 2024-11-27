@@ -9,6 +9,8 @@ import service.DBconnection;
 import basicObject.Commande;
 
 public class FactureToDB {
+	
+	
 
 	public static void addFacture(Facture facture) {
 		String query = "INSERT INTO facture (commande_id, date_facture, montant) VALUES (?, ?, ?)";
@@ -44,6 +46,10 @@ public class FactureToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
+	
+	
 
 	public static void deleteFacture(int factureID) {
 		String query = "DELETE FROM facture WHERE id = ?";
@@ -71,4 +77,6 @@ public class FactureToDB {
 			e.printStackTrace();
 		}
 	}
+	
+	
 }

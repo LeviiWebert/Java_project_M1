@@ -74,15 +74,40 @@ public class AuthentificationClient extends JFrame {
         newClientButton.addActionListener(e -> showNewClientPanel());
     }
 
-    // Crée et configure le panneau pour la sélection d'un client existant
     private JPanel createClientSelectionPanel() {
         JPanel panel = new JPanel(new GridLayout(3, 2, 10, 10));
         panel.setBackground(bgColor);
 
         // ComboBox pour sélectionner un client existant
         clientComboBox = new JComboBox<>();
+
+        // Récupérer la liste des clients
         List<Client> clients = DBToclient.getClients();
-        clients.forEach(clientComboBox::addItem); // Ajout des clients à la liste déroulante
+        
+        // Trier la liste des clients par nom de famille
+        clients.sort((client1, client2) -> client1.getNom().compareToIgnoreCase(client2.getNom()));
+
+        // Ajouter les clients triés à la liste déroulante
+        clients.forEach(clientComboBox::addItem);
+
+        // Ajouter un KeyListener pour filtrer la sélection par première lettre
+        clientComboBox.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {
+                char typedChar = e.getKeyChar();
+                if (Character.isLetter(typedChar)) {
+                    String letter = String.valueOf(typedChar).toUpperCase();  // Lettre saisie en majuscule
+                    for (int i = 0; i < clientComboBox.getItemCount(); i++) {
+                        Client client = (Client) clientComboBox.getItemAt(i);
+                        // Vérifier si le nom du client commence par la lettre tapée
+                        if (client.getNom().toUpperCase().startsWith(letter)) {
+                            clientComboBox.setSelectedIndex(i);  // Sélectionner l'élément correspondant
+                            break;
+                        }
+                    }
+                }
+            }
+        });
 
         // Champ de saisie pour le mot de passe
         passwordField = new JPasswordField();
@@ -96,6 +121,8 @@ public class AuthentificationClient extends JFrame {
 
         return panel;
     }
+
+
 
     // Crée et configure le panneau pour l'inscription d'un nouveau client
     private JPanel createNewClientPanel() {

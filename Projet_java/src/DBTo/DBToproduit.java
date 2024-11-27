@@ -16,6 +16,8 @@ import basicObject.Produit;
 import service.DBconnection;
 
 public class DBToproduit {
+	
+	
 	public static int getMaxProduitID() {
 	    int maxID = 0;
 	    try (Connection connection = DBconnection.getConnection()) {
@@ -36,6 +38,9 @@ public class DBToproduit {
 	    }
 	    return maxID;
 	}
+	
+	
+	
 	
 	
     public static List<Produit> getproduit(){
@@ -80,6 +85,11 @@ public class DBToproduit {
         return produit;
     }
     
+    
+    
+    
+    
+    
     public static Produit getProduitByid(int produitId) {
         Produit produit = null;
 
@@ -120,26 +130,11 @@ public class DBToproduit {
         return produit;  // Retourne le produit ou null si aucun produit n'a été trouvé
     }
     
-//    public static List<Produit> getproduitByModele(List<String> selectedProductModele) {
-//        List<Produit> produitList = new ArrayList<>();
-//
-//        if (selectedProductModele == null || selectedProductModele.isEmpty()) {
-//            return produitList; // retourne une liste vide si aucune sélection
-//        }
-//
-//        // Supposons que vous ayez une méthode getproduit() qui renvoie tous les produits disponibles
-//        List<Produit> allProducts = getproduit();
-//
-//        for (Produit produit : allProducts) {
-//            for (String modele : selectedProductModele) {
-//                if (produit.getModele().equals(modele)) {
-//                    produitList.add(produit);
-//                }
-//            }
-//        }
-//
-//        return produitList; // Retourne la liste des produits trouvés
-//    }
+    
+    
+    
+    
+
     public static List<Produit> getproduitByModele(List<String> selectedProductModele) {
         List<Produit> produitList = new ArrayList<>();
 
@@ -158,44 +153,30 @@ public class DBToproduit {
 
         return produitList; // Retourne la liste des produits trouvés
     }
-
-
     
-    
-    public static void  main(String [] args){
-    	
-    	int maxproduitID = DBToproduit.getMaxProduitID();
-        System.out.println("Le prduit ID maximum est : " + maxproduitID);
-    	
+    // Méthode pour vérifier si un produit existe déjà dans la base de données
+    public static boolean isProduitExists(String marque, String modele) {
+        // Remplacez cette ligne par la logique pour vérifier les doublons dans votre base de données
+        // Par exemple, effectuez une requête SELECT pour vérifier si un produit avec la même marque et le même modèle existe déjà
+        String query = "SELECT COUNT(*) FROM produit WHERE marque = ? AND modele = ?";
         
-        Produit p = DBToproduit.getProduitByid(maxproduitID);
-        p.toString();
-    	
-    	//List<Produit> produits = DBToproduit.getproduit();
-
- 	    //Vérification s'il y a des clients dans la liste
-// 	    if (produits.isEmpty()) {
-// 	        System.out.println("Aucun client trouvé.");
-// 	    } else {
-// 	        // Parcourir et afficher les informations de chaque client
-// 	        for (Produit produit : produits){
-// 	        	
-// 	            System.out.println("ID produit : " + produit.getId());
-// 	            System.out.println("marque : " + produit.getMarque());
-// 	            System.out.println("modele : " + produit.getModele());
-// 	            System.out.println("prix : " + produit.getPrix() +" € ");
-// 	            System.out.println("type : " + produit.getType());
-// 	            System.out.println("description : " + produit.getDescription());
-// 	            System.out.println("quantite_stock : " + produit.getDescription());
-// 	            System.out.println("-----------------------------------------");
-// 	            
-// 	        }
-// 	    }
-    	
-    	
-    	
+        try (Connection conn = DBconnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            
+            stmt.setString(1, marque);
+            stmt.setString(2, modele);
+            
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0; // Si le compteur est supérieur à 0, cela signifie que le produit existe déjà
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return false; // Retourner false si le produit n'existe pas
     }
-    
     
     
 }
