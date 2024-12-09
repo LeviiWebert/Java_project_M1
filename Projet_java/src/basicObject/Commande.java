@@ -1,15 +1,10 @@
 package basicObject;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import DBTo.DBToclient;
 import DBTo.DBTocommande;
 import DBTo.DBTofacture;
 import toDB.LigneCommandeToDB;
@@ -32,7 +27,7 @@ public class Commande {
     	this.id  = DBTocommande.getMaxIdCommande() + 1;
         this.clientId = clientId;
         this.dateCommande = new Date();  // Date actuelle
-        this.etat = "en cours";          // État initial
+        this.etat = "validée";          // État initial
         this.lignes = new ArrayList<>(); // Initialiser la liste des lignes de commande
         this.total =  calculerTotal();   // Montant total
         
@@ -187,7 +182,7 @@ public class Commande {
         return sb.toString(); // Retourne la chaîne de caractères complète
     }
 
-	public Map getProduitsQuantites() {
+	public Map<Produit, Integer> getProduitsQuantites() {
 		Map<Produit, Integer> produitsMap = new HashMap<Produit, Integer>() ;
 		for(LigneCommande ligne : lignes) {
 			produitsMap.put(ligne.getProduit(), ligne.getQuantite()) ;

@@ -97,4 +97,12 @@ public class Panier {
 		this.total = total;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 }

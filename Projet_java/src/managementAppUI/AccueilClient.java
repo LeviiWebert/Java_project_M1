@@ -9,7 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AccueilClient extends JFrame {
-    private int client_id;
+    private static final long serialVersionUID = 1L;
+	private int client_id;
 
     public AccueilClient(int client_id) {
         this.client_id = client_id;
@@ -72,9 +73,8 @@ public class AccueilClient extends JFrame {
     private void openShop() {
     	LoadingServiceUI loadingService = new LoadingServiceUI();
         loadingService.showLoadingDialog(this);
-        SwingUtilities.invokeLater(() -> {
-        	new Shop(client_id,loadingService).setVisible(true);
-        });
+        Shop shop = new Shop(client_id,loadingService);
+        shop.setVisible(true);
         this.dispose();
     }
 

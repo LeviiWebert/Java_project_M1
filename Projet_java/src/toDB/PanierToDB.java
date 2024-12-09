@@ -23,39 +23,35 @@ public class PanierToDB {
 						PreparedStatement.RETURN_GENERATED_KEYS);
 				PreparedStatement preparedStatementLigneCommande = connection.prepareStatement(queryLigneCommande)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Insertion du panier
-				preparedStatementPanier.setInt(1, panier.getClientId());
-				preparedStatementPanier.setDouble(2, panier.getTotal());
-				int affectedRowsPanier = preparedStatementPanier.executeUpdate();
+			// Insertion du panier
+			preparedStatementPanier.setInt(1, panier.getClientId());
+			preparedStatementPanier.setDouble(2, panier.getTotal());
+			int affectedRowsPanier = preparedStatementPanier.executeUpdate();
 
-				if (affectedRowsPanier > 0) {
-					System.out.println("Panier ajouté avec succès.");
+			if (affectedRowsPanier > 0) {
+				System.out.println("Panier ajouté avec succès.");
 
-					// Récupération de l'identifiant du panier généré
-					ResultSet generatedKeys = preparedStatementPanier.getGeneratedKeys();
-					if (generatedKeys.next()) {
-						int panierId = generatedKeys.getInt(1);
+				// Récupération de l'identifiant du panier généré
+				ResultSet generatedKeys = preparedStatementPanier.getGeneratedKeys();
+				if (generatedKeys.next()) {
+					int panierId = generatedKeys.getInt(1);
 
-						// Insertion des lignes de commande du panier
-						List<LigneCommande> lignes = panier.getLignes();
-						for (LigneCommande ligne : lignes) {
-							preparedStatementLigneCommande.setInt(1, panierId);
-							preparedStatementLigneCommande.setInt(2, ligne.getProduit().getId());
-							preparedStatementLigneCommande.setInt(3, ligne.getQuantite());
-							preparedStatementLigneCommande.setDouble(4, ligne.getPrixUnitaire());
-							preparedStatementLigneCommande.setDouble(5, ligne.getPrixTotal());
-							preparedStatementLigneCommande.addBatch();
-						}
-						preparedStatementLigneCommande.executeBatch();
+					// Insertion des lignes de commande du panier
+					List<LigneCommande> lignes = panier.getLignes();
+					for (LigneCommande ligne : lignes) {
+						preparedStatementLigneCommande.setInt(1, panierId);
+						preparedStatementLigneCommande.setInt(2, ligne.getProduit().getId());
+						preparedStatementLigneCommande.setInt(3, ligne.getQuantite());
+						preparedStatementLigneCommande.setDouble(4, ligne.getPrixUnitaire());
+						preparedStatementLigneCommande.setDouble(5, ligne.getPrixTotal());
+						preparedStatementLigneCommande.addBatch();
 					}
-				} else {
-					System.out.println("L'insertion du panier a échoué.");
+					preparedStatementLigneCommande.executeBatch();
 				}
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("L'insertion du panier a échoué.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -74,24 +70,20 @@ public class PanierToDB {
 				PreparedStatement preparedStatementLigneCommande = connection.prepareStatement(queryLigneCommande);
 				PreparedStatement preparedStatementPanier = connection.prepareStatement(queryPanier)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Suppression des lignes de commande du panier
-				preparedStatementLigneCommande.setInt(1, panierId);
-				preparedStatementLigneCommande.executeUpdate();
+			// Suppression des lignes de commande du panier
+			preparedStatementLigneCommande.setInt(1, panierId);
+			preparedStatementLigneCommande.executeUpdate();
 
-				// Suppression du panier
-				preparedStatementPanier.setInt(1, panierId);
-				int affectedRowsPanier = preparedStatementPanier.executeUpdate();
+			// Suppression du panier
+			preparedStatementPanier.setInt(1, panierId);
+			int affectedRowsPanier = preparedStatementPanier.executeUpdate();
 
-				if (affectedRowsPanier > 0) {
-					System.out.println("Panier supprimé avec succès.");
-				} else {
-					System.out.println("Aucun panier trouvé avec l'identifiant " + panierId + ".");
-				}
+			if (affectedRowsPanier > 0) {
+				System.out.println("Panier supprimé avec succès.");
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("Aucun panier trouvé avec l'identifiant " + panierId + ".");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

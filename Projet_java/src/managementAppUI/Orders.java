@@ -9,18 +9,16 @@ import javax.swing.*;
 
 import DBTo.DBToclient;
 import DBTo.DBTocommande;
-import basicObject.Client;
 import basicObject.Commande;
 
 public class Orders extends JFrame {
-    private int client_id;
+    private static final long serialVersionUID = 1L;
+	private int client_id;
     private DefaultListModel<String> listModel;
     private JList<String> orderList;
 
     public Orders(int client_id) {
         this.client_id = client_id;
-        Client client = DBToclient.getClientByID(client_id);
-
         // Configurations générales de la fenêtre
         setTitle("Mes Commandes");
         setSize(1000, 700);

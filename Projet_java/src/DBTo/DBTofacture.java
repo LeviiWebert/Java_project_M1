@@ -5,19 +5,13 @@ import java.sql.SQLException;
 
 import basicObject.Facture;
 
-import java.time.LocalDate;   // java.time.LocalDate (à partir de Java 8)
-
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import basicObject.Commande;
-import basicObject.LigneCommande;
-import basicObject.Produit;
 import service.DBconnection;
 
 public class DBTofacture {

@@ -43,7 +43,7 @@ public class DBToclient {
 	
 	
 	public static List<Client> getClients() {
-		List<Client> clients = new ArrayList(); // Renommé de "Client" à "clients"
+		List<Client> clients = new ArrayList<Client>(); // Renommé de "Client" à "clients"
 
 		try (Connection connection = DBconnection.getConnection()) {
 			String query = "SELECT * FROM client";
@@ -118,7 +118,7 @@ public class DBToclient {
 	
 
 	public static List<Commande> getCommandesByClientID(int clientID) {
-		List<Commande> commandes = new ArrayList(); // Liste des commandes
+		List<Commande> commandes = new ArrayList<Commande>(); // Liste des commandes
 
 		try (Connection connection = DBconnection.getConnection()) {
 			String query = "SELECT DISTINCT * FROM commande WHERE client_id = ?";

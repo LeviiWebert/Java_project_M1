@@ -54,22 +54,18 @@ public class CommandeToDB {
 		try (Connection connection = DBconnection.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Définir la valeur du paramètre
-				preparedStatement.setInt(1, commandeID);
+			// Définir la valeur du paramètre
+			preparedStatement.setInt(1, commandeID);
 
-				// Exécuter la suppression
-				int affectedRows = preparedStatement.executeUpdate();
+			// Exécuter la suppression
+			int affectedRows = preparedStatement.executeUpdate();
 
-				if (affectedRows > 0) {
-					System.out.println("Commande avec l'ID " + commandeID + " supprimée avec succès.");
-				} else {
-					System.out.println("Aucune commande trouvée avec l'ID " + commandeID + ".");
-				}
+			if (affectedRows > 0) {
+				System.out.println("Commande avec l'ID " + commandeID + " supprimée avec succès.");
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("Aucune commande trouvée avec l'ID " + commandeID + ".");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

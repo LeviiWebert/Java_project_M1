@@ -13,7 +13,9 @@ import basicObject.Produit;
 
 public class DetailsProduit extends JFrame {
 	
-    public DetailsProduit(Produit product) {
+    private static final long serialVersionUID = 1L;
+
+	public DetailsProduit(Produit product) {
         setTitle("Détails du Produit");
         setSize(800, 600);
         setLayout(new BorderLayout());

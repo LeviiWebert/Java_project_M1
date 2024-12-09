@@ -7,14 +7,14 @@ import DBTo.DBToclient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class AuthentificationClient extends JFrame {
 
-    // Déclaration des composants d'interface utilisateur
+    private static final long serialVersionUID = 1L;
+	// Déclaration des composants d'interface utilisateur
     private JComboBox<Client> clientComboBox;
     private JPasswordField passwordField;
     private JTextField nomField, prenomField, emailField, telephoneField, adresseField, dateNaissanceField;

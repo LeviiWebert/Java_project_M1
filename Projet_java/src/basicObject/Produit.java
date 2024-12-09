@@ -2,7 +2,6 @@ package basicObject;
 
 import javax.swing.ImageIcon;
 
-import DBTo.DBToclient;
 import DBTo.DBToproduit;
 
 public class Produit {

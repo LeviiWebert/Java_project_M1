@@ -1,6 +1,5 @@
 package basicObject;
 
-import DBTo.DBTofacture;
 import DBTo.DBTolignecommande;
 
 public class LigneCommande {
@@ -11,7 +10,7 @@ public class LigneCommande {
 	private int quantite;
 
 	public LigneCommande(Commande commande, Produit produit, int quantite) {
-        this.id = DBTolignecommande.getMaxLigneCommande() + 1;                           // Initialisation de l'identifiant
+        this.setId(DBTolignecommande.getMaxLigneCommande() + 1);                           // Initialisation de l'identifiant
 		this.commande = commande;
 		this.produit = produit;
 		this.quantite = quantite;
@@ -58,6 +57,14 @@ public class LigneCommande {
 		sb.append("Prix Total: ").append(getPrixTotal()).append("\n");
 
 		return sb.toString();
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }

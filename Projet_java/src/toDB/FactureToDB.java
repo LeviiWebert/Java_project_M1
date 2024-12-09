@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import basicObject.Facture;
 import service.DBconnection;
-import basicObject.Commande;
 
 public class FactureToDB {
 	
@@ -18,29 +17,25 @@ public class FactureToDB {
 				PreparedStatement preparedStatement = connection.prepareStatement(query,
 						PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Définir les valeurs des paramètres
-				preparedStatement.setInt(1, facture.getCommande().getId());
-				preparedStatement.setDate(2, java.sql.Date.valueOf(facture.getDateFacture()));
-				preparedStatement.setDouble(3, facture.getMontant());
+			// Définir les valeurs des paramètres
+			preparedStatement.setInt(1, facture.getCommande().getId());
+			preparedStatement.setDate(2, java.sql.Date.valueOf(facture.getDateFacture()));
+			preparedStatement.setDouble(3, facture.getMontant());
 
-				// Exécuter l'insertion
-				int affectedRows = preparedStatement.executeUpdate();
+			// Exécuter l'insertion
+			int affectedRows = preparedStatement.executeUpdate();
 
-				if (affectedRows > 0) {
-					try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-						if (generatedKeys.next()) {
-							facture.setId(generatedKeys.getInt(1));
-							System.out.println("Facture ajoutée avec l'ID : " + facture.getId());
-						}
+			if (affectedRows > 0) {
+				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						facture.setId(generatedKeys.getInt(1));
+						System.out.println("Facture ajoutée avec l'ID : " + facture.getId());
 					}
-				} else {
-					System.out.println("L'insertion de la facture a échoué.");
 				}
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("L'insertion de la facture a échoué.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -56,22 +51,18 @@ public class FactureToDB {
 		try (Connection connection = DBconnection.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Définir la valeur du paramètre
-				preparedStatement.setInt(1, factureID);
+			// Définir la valeur du paramètre
+			preparedStatement.setInt(1, factureID);
 
-				// Exécuter la suppression
-				int affectedRows = preparedStatement.executeUpdate();
+			// Exécuter la suppression
+			int affectedRows = preparedStatement.executeUpdate();
 
-				if (affectedRows > 0) {
-					System.out.println("Facture avec l'ID " + factureID + " supprimée avec succès.");
-				} else {
-					System.out.println("Aucune facture trouvée avec l'ID " + factureID + ".");
-				}
+			if (affectedRows > 0) {
+				System.out.println("Facture avec l'ID " + factureID + " supprimée avec succès.");
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("Aucune facture trouvée avec l'ID " + factureID + ".");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

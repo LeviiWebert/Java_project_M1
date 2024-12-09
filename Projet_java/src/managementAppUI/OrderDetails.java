@@ -16,22 +16,17 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
-
 import basicObject.Commande;
 import basicObject.Facture;
 import basicObject.LigneCommande;
 import basicObject.Produit;
 
 class OrderDetails extends JFrame {
-    private Commande commande;
-
-    public OrderDetails(Commande commande) {
-        this.commande = commande;
-
+    private static final long serialVersionUID = 1L;
+    
+	public OrderDetails(Commande commande) {
         setTitle("Détails de la Commande");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

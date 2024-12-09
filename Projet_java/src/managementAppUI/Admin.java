@@ -20,7 +20,11 @@ import java.text.SimpleDateFormat;
 
 public class Admin extends JFrame {
 
-    private JComboBox<Client> clientComboBox;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private JComboBox<Client> clientComboBox;
     private JComboBox<Produit> produitComboBox;
     private JTextField nomField;
     private JTextField prenomField;
@@ -113,7 +117,7 @@ public class Admin extends JFrame {
         produitComboBox = new JComboBox<>();
         produitComboBox.addItem(null);
         
-        List<Produit> produits = DBToproduit.getProduits();
+        List<Produit> produits = DBToproduit.getproduit();
         for (Produit produit : produits) {
             produitComboBox.addItem(produit);
         }
@@ -122,7 +126,12 @@ public class Admin extends JFrame {
         produitComboBox.setBackground(new Color(255, 255, 255));
 
         produitComboBox.setRenderer(new DefaultListCellRenderer() {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
                 if (value instanceof Produit) {
@@ -543,8 +552,8 @@ public class Admin extends JFrame {
         String description = produitDescriptionField.getText();
         String adr_img = adresseImageField.getText();
 
-        // Vérifier que le produit est sélectionné et que la quantité n'est pas vide
-        if (selectedProduit != null && !quantiteText.isEmpty() && !prixText.isEmpty() && !description.isEmpty() && !adr_img.isEmpty()) {
+        // Vérifier que le produit est sélectionné et que les champs requis ne sont pas vides
+        if (selectedProduit != null && !quantiteText.isEmpty() && !prixText.isEmpty() && !description.isEmpty()) {
             try {
                 // Conversion des valeurs numériques
                 int nouvelleQuantite = Integer.parseInt(quantiteText);
@@ -554,16 +563,18 @@ public class Admin extends JFrame {
                 selectedProduit.setQuantite_stock(nouvelleQuantite);
                 selectedProduit.setPrix(nouveauPrix);
                 selectedProduit.setDescription(description);
-                
-                // Vérification de l'adresse de l'image (optionnelle, mais peut être valide)
-                try {
-                    ImageIcon image = new ImageIcon(new URL(adr_img));
-                    image.setDescription(adr_img);
-                    selectedProduit.setImage(image);
-                } catch (MalformedURLException e) {
-                    // Si l'adresse de l'image est invalide, afficher un message
-                    JOptionPane.showMessageDialog(this, "L'adresse de l'image est invalide. Veuillez entrer une URL valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                    return;
+
+                // Mettre à jour l'image uniquement si une URL est fournie
+                if (!adr_img.isEmpty()) {
+                    try {
+                        ImageIcon image = new ImageIcon(new URL(adr_img));
+                        image.setDescription(adr_img);
+                        selectedProduit.setImage(image);
+                    } catch (MalformedURLException e) {
+                        // Si l'adresse de l'image est invalide, afficher un message
+                        JOptionPane.showMessageDialog(this, "L'adresse de l'image est invalide. Veuillez entrer une URL valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
                 }
 
                 // Mettre à jour le produit dans la base de données
@@ -579,10 +590,11 @@ public class Admin extends JFrame {
                 JOptionPane.showMessageDialog(this, "Veuillez entrer des valeurs valides pour la quantité et le prix.", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            // Si un champ est vide ou qu'aucun produit n'est sélectionné
+            // Si un champ requis est vide ou qu'aucun produit n'est sélectionné
             JOptionPane.showMessageDialog(this, "Veuillez sélectionner un produit et remplir tous les champs nécessaires.", "Erreur", JOptionPane.ERROR_MESSAGE);
         }
     }
+
 
     
     
@@ -594,7 +606,7 @@ public class Admin extends JFrame {
         produitComboBox.removeAllItems();
 
         // Récupérer la liste des produits mis à jour depuis la base de données
-        List<Produit> produits = DBToproduit.getProduits();
+        List<Produit> produits = DBToproduit.getproduit();
 
         // Ajouter les produits à la JComboBox
         for (Produit produit : produits) {

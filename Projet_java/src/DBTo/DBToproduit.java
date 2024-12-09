@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import basicObject.Client;
 import basicObject.Produit;
 import service.DBconnection;
 
@@ -43,9 +42,9 @@ public class DBToproduit {
 	
 	
 	
-    public static List<Produit> getProduits(){
+    public static List<Produit> getproduit(){
     	
-        List<Produit> produits = new ArrayList<>();
+        List<Produit> produit = new ArrayList<>();
         
         try (Connection connection = DBconnection.getConnection()) {
             String query = "SELECT * FROM produit";  // Assure-toi que cette table existe dans ta base de données
@@ -65,13 +64,13 @@ public class DBToproduit {
                     
 
                     
-                    Produit produit;
+                    Produit prduit;
                     ImageIcon image;
 					try {
 						image = new ImageIcon(new URL(adr_img));
 						image.setDescription(adr_img);
-						produit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,image);
-						produits.add(produit);
+						prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,image);
+						produit.add(prduit);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
@@ -82,7 +81,7 @@ public class DBToproduit {
             e.printStackTrace();
         }
         
-        return produits;
+        return produit;
     }
     
     
@@ -143,7 +142,7 @@ public class DBToproduit {
         }
 
         // Supposons que vous ayez une méthode getproduit() qui renvoie tous les produits disponibles
-        List<Produit> allProducts = getProduits();
+        List<Produit> allProducts = getproduit();
 
         for (Produit produit : allProducts) {
             if (selectedProductModele.contains(produit.getModele())) {

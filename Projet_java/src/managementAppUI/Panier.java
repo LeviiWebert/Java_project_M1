@@ -1,8 +1,6 @@
 package managementAppUI;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.*;
@@ -14,7 +12,8 @@ import toDB.CommandeToDB;
 import toDB.FactureToDB;
 
 public class Panier extends JFrame {
-    private List<Produit> cart;
+    private static final long serialVersionUID = 1L;
+	private List<Produit> cart;
     private JPanel cartPanel;
 
     public Panier(List<Produit> cart, int clientId) {
