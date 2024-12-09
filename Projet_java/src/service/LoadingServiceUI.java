@@ -1,6 +1,10 @@
 package service;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -9,10 +13,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 
 public class LoadingServiceUI {
-    private JDialog loadingDialog;
+    private JWindow splashScreen;
+    //private JDialog loadingDialog;
 
     public void showLoadingDialog(Window parent) {
         // Charger l'icône de chargement en dehors du thread de Swing pour éviter les problèmes de synchronisation
@@ -28,26 +34,48 @@ public class LoadingServiceUI {
 
         // Créer et afficher le dialogue de chargement sur le thread de dispatching des événements de Swing
         SwingUtilities.invokeLater(() -> {
-            loadingDialog = new JDialog(parent, "Chargement");
-            JPanel panel = new JPanel(new BorderLayout());
-            JLabel loadingLabel = new JLabel("Chargement en cours, veuillez patienter...", JLabel.CENTER);
-            JLabel iconLabel = new JLabel(loadingIcon, JLabel.CENTER);
-
-            panel.add(iconLabel, BorderLayout.CENTER);
-            panel.add(loadingLabel, BorderLayout.SOUTH);
-            loadingDialog.getContentPane().add(panel);
-            loadingDialog.setSize(500, 400);
-            loadingDialog.setLocationRelativeTo(parent);
-            loadingDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
-            loadingDialog.setVisible(true);
-
+			/*
+			 * loadingDialog = new JDialog(parent, "Chargement"); JPanel panel = new
+			 * JPanel(new BorderLayout()); JLabel loadingLabel = new
+			 * JLabel("Chargement en cours, veuillez patienter...", JLabel.CENTER); JLabel
+			 * iconLabel = new JLabel(loadingIcon, JLabel.CENTER);
+			 * 
+			 * panel.add(iconLabel, BorderLayout.CENTER); panel.add(loadingLabel,
+			 * BorderLayout.SOUTH); loadingDialog.getContentPane().add(panel);
+			 * loadingDialog.setSize(150, 100); loadingDialog.setLocationRelativeTo(parent);
+			 * loadingDialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+			 * loadingDialog.setVisible(true);
+			 */
+         // Créer la fenêtre de chargement (splash screen)
+            splashScreen = new JWindow();
+            
+            // Définir la taille de la fenêtre
+            splashScreen.setSize(300, 100);
+            
+            // Positionner la fenêtre au centre de l'écran
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int x = (int) (screenSize.getWidth() - splashScreen.getWidth()) / 2;
+            int y = (int) (screenSize.getHeight() - splashScreen.getHeight()) / 2;
+            splashScreen.setLocation(x, y);
+            
+            // Ajouter un label avec le texte "Veuillez patienter..."
+            JLabel label = new JLabel("Veuillez patienter...", JLabel.CENTER);
+            label.setFont(new Font("Arial", Font.PLAIN, 18));
+            label.setForeground(Color.BLACK);
+            
+            // Ajouter le label à la fenêtre
+            splashScreen.getContentPane().add(label);
+            
+            // Rendre la fenêtre de chargement visible
+            splashScreen.setVisible(true);
             // Démarrer le thread de vérification de la connexion Internet
             new Thread(() -> {
                 try {
                     if (!isInternetAvailable()) {
                         SwingUtilities.invokeLater(() -> {
                             showMessageDialog(parent, "Vous avez besoin d'une connexion internet pour afficher les images des produits");
-                            loadingDialog.dispose();
+                            //loadingDialog.dispose();
+                            splashScreen.dispose();
                         });
                         return;
                     }
@@ -59,8 +87,11 @@ public class LoadingServiceUI {
     }
 
     public void hideLoadingDialog() {
-        if (loadingDialog != null) {
-            SwingUtilities.invokeLater(() -> loadingDialog.dispose());
+//        if (loadingDialog != null) {
+//            SwingUtilities.invokeLater(() -> loadingDialog.dispose());
+//        }
+        if (splashScreen != null) {
+            SwingUtilities.invokeLater(() -> splashScreen.dispose());
         }
     }
 

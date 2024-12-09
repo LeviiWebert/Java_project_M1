@@ -119,7 +119,7 @@ public class Shop extends JFrame {
     private JPanel createProductPanel(Produit product) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
-        panel.setBorder(BorderFactory.createLineBorder(new Color(173, 216, 230), 1));
+        panel.setBorder(BorderFactory.createLineBorder(new Color(242, 143, 121), 1));
         panel.setPreferredSize(new Dimension(250, 300));
         panel.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Curseur interactif
 
@@ -140,8 +140,8 @@ public class Shop extends JFrame {
         JButton detailsButton = new JButton("📖 Détails");
         JButton addToCartButton = new JButton("➕ Ajouter au panier");
 
-        detailsButton.setBackground(new Color(255, 215, 0));
-        addToCartButton.setBackground(new Color(50, 205, 50));
+        detailsButton.setBackground(new Color(242, 104, 73));
+        addToCartButton.setBackground(new Color(217, 110, 17));
 
         detailsButton.setFont(new Font("SansSerif", Font.BOLD, 12));
         addToCartButton.setFont(new Font("SansSerif", Font.BOLD, 12));
@@ -189,7 +189,7 @@ public class Shop extends JFrame {
 
             JButton backButton = new JButton("⟲ Revenir à la boutique");
             backButton.setFont(new Font("SansSerif", Font.BOLD, 14));
-            backButton.setBackground(new Color(255, 69, 0));
+            backButton.setBackground(new Color(24, 140, 119));
             backButton.setForeground(Color.WHITE);
             backButton.addActionListener(e -> resetShop(backButton));
 

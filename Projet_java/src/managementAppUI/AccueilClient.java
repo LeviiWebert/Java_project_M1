@@ -72,8 +72,9 @@ public class AccueilClient extends JFrame {
     private void openShop() {
     	LoadingServiceUI loadingService = new LoadingServiceUI();
         loadingService.showLoadingDialog(this);
-        Shop shop = new Shop(client_id,loadingService);
-        shop.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+        	new Shop(client_id,loadingService).setVisible(true);
+        });
         this.dispose();
     }
 
