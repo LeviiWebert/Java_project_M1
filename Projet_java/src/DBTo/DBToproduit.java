@@ -43,9 +43,9 @@ public class DBToproduit {
 	
 	
 	
-    public static List<Produit> getproduit(){
+    public static List<Produit> getProduits(){
     	
-        List<Produit> produit = new ArrayList<>();
+        List<Produit> produits = new ArrayList<>();
         
         try (Connection connection = DBconnection.getConnection()) {
             String query = "SELECT * FROM produit";  // Assure-toi que cette table existe dans ta base de données
@@ -65,13 +65,13 @@ public class DBToproduit {
                     
 
                     
-                    Produit prduit;
+                    Produit produit;
                     ImageIcon image;
 					try {
 						image = new ImageIcon(new URL(adr_img));
 						image.setDescription(adr_img);
-						prduit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,image);
-						produit.add(prduit);
+						produit = new Produit (ID, marque, modele, prix, type,description,quantite_stock,image);
+						produits.add(produit);
 					} catch (MalformedURLException e) {
 						e.printStackTrace();
 					}
@@ -82,7 +82,7 @@ public class DBToproduit {
             e.printStackTrace();
         }
         
-        return produit;
+        return produits;
     }
     
     
@@ -143,7 +143,7 @@ public class DBToproduit {
         }
 
         // Supposons que vous ayez une méthode getproduit() qui renvoie tous les produits disponibles
-        List<Produit> allProducts = getproduit();
+        List<Produit> allProducts = getProduits();
 
         for (Produit produit : allProducts) {
             if (selectedProductModele.contains(produit.getModele())) {

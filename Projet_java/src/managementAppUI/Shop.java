@@ -26,7 +26,7 @@ public class Shop extends JFrame {
         // Chargement des produits
         this.client_id = client_id;
         this.panier = new ArrayList<>();
-        my_products = DBToproduit.getproduit();
+        my_products = DBToproduit.getProduits();
         loadingService.hideLoadingDialog();
 
         // Configuration de la fenêtre

@@ -113,7 +113,7 @@ public class Admin extends JFrame {
         produitComboBox = new JComboBox<>();
         produitComboBox.addItem(null);
         
-        List<Produit> produits = DBToproduit.getproduit();
+        List<Produit> produits = DBToproduit.getProduits();
         for (Produit produit : produits) {
             produitComboBox.addItem(produit);
         }
@@ -594,7 +594,7 @@ public class Admin extends JFrame {
         produitComboBox.removeAllItems();
 
         // Récupérer la liste des produits mis à jour depuis la base de données
-        List<Produit> produits = DBToproduit.getproduit();
+        List<Produit> produits = DBToproduit.getProduits();
 
         // Ajouter les produits à la JComboBox
         for (Produit produit : produits) {
