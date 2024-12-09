@@ -69,8 +69,6 @@ public class DBTocommande {
 								while (resultSetLigne.next()) {
 									int produit_id = resultSetLigne.getInt("produit_id");
 									int quantite = resultSetLigne.getInt("quantite");
-									double prix_unitaire = resultSetLigne.getDouble("prix_unitaire");
-
 									// Récupérer le produit correspondant à produitId
 									Produit produit = DBToproduit.getProduitByid(produit_id); // Méthode à implémenter
 																								// dans DBTOproduit

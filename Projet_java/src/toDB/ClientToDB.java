@@ -1,7 +1,6 @@
 package toDB;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,7 +9,6 @@ import java.util.List;
 
 import basicObject.Client;
 import service.DBconnection;
-import service.DateBDD;
 
 public class ClientToDB {
 	
@@ -48,32 +46,28 @@ public class ClientToDB {
 				PreparedStatement preparedStatement = connection.prepareStatement(query,
 						PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Définir les valeurs des paramètres
-				preparedStatement.setString(1, client.getDate_naissance());
-				preparedStatement.setString(2, client.getNom());
-				preparedStatement.setString(3, client.getPrenom());
-				preparedStatement.setString(4, client.getEmail());
-				preparedStatement.setString(5, client.getTelephone());
-				preparedStatement.setString(6, client.getAdresse());
-				preparedStatement.setString(7, client.getmdp());
+			// Définir les valeurs des paramètres
+			preparedStatement.setString(1, client.getDate_naissance());
+			preparedStatement.setString(2, client.getNom());
+			preparedStatement.setString(3, client.getPrenom());
+			preparedStatement.setString(4, client.getEmail());
+			preparedStatement.setString(5, client.getTelephone());
+			preparedStatement.setString(6, client.getAdresse());
+			preparedStatement.setString(7, client.getmdp());
 
-				// Exécuter l'insertion
-				int affectedRows = preparedStatement.executeUpdate();
+			// Exécuter l'insertion
+			int affectedRows = preparedStatement.executeUpdate();
 
-				if (affectedRows > 0) {
-					try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-						if (generatedKeys.next()) {
-							System.out.println("Client ajouté avec l'ID : " + client.getClientID());
-						}
+			if (affectedRows > 0) {
+				try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						System.out.println("Client ajouté avec l'ID : " + client.getClientID());
 					}
-				} else {
-					System.out.println("L'insertion du client a échoué.");
 				}
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("L'insertion du client a échoué.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -90,22 +84,18 @@ public class ClientToDB {
 		try (Connection connection = DBconnection.getConnection();
 				PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-			if (connection != null) {
-				System.out.println("Connexion réussie !");
+			System.out.println("Connexion réussie !");
 
-				// Définir la valeur du paramètre
-				preparedStatement.setInt(1, clientID);
+			// Définir la valeur du paramètre
+			preparedStatement.setInt(1, clientID);
 
-				// Exécuter la suppression
-				int affectedRows = preparedStatement.executeUpdate();
+			// Exécuter la suppression
+			int affectedRows = preparedStatement.executeUpdate();
 
-				if (affectedRows > 0) {
-					System.out.println("Client avec l'ID " + clientID + " supprimé avec succès.");
-				} else {
-					System.out.println("Aucun client trouvé avec l'ID " + clientID + ".");
-				}
+			if (affectedRows > 0) {
+				System.out.println("Client avec l'ID " + clientID + " supprimé avec succès.");
 			} else {
-				System.out.println("La connexion a échoué !");
+				System.out.println("Aucun client trouvé avec l'ID " + clientID + ".");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

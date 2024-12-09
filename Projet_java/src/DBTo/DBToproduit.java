@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-import basicObject.Client;
 import basicObject.Produit;
 import service.DBconnection;
 

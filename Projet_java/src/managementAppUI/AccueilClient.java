@@ -9,7 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class AccueilClient extends JFrame {
-    private int client_id;
+    private static final long serialVersionUID = 1L;
+	private int client_id;
 
     public AccueilClient(int client_id) {
         this.client_id = client_id;

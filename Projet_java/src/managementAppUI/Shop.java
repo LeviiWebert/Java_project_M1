@@ -1,21 +1,17 @@
 package managementAppUI;
 
-import basicObject.Client;
-import basicObject.Commande;
 import basicObject.Produit;
 import service.LoadingServiceUI;
-import toDB.CommandeToDB;
 import DBTo.DBToproduit;
-import DBTo.DBToclient;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Shop extends JFrame {
-    private List<Produit> my_products;
+    private static final long serialVersionUID = 1L;
+	private List<Produit> my_products;
     private List<Produit> panier;
     private JTextField searchField;
     private JPanel productPanel;
@@ -78,6 +74,7 @@ public class Shop extends JFrame {
         JButton viewOrdersButton = new JButton("📦 Voir mes commandes");
         JButton viewCartButton = new JButton("🛒 Voir le Panier");
         JButton backButton = new JButton("🏠 Retour à l'Accueil");
+        
 
         viewOrdersButton.setFont(new Font("SansSerif", Font.BOLD, 14));
         viewCartButton.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -201,6 +198,20 @@ public class Shop extends JFrame {
             for (Produit product : filteredProducts) {
                 productPanel.add(createProductPanel(product));
             }
+            
+            // Ajouter un bouton "Retour à l'accueil" en bas
+            JPanel backButtonPanel = new JPanel(new BorderLayout());
+            backButtonPanel.setBackground(Color.WHITE);
+
+            JButton homeButton = new JButton("⟲ Revenir à la boutique");
+            homeButton.setFont(new Font("SansSerif", Font.BOLD, 14));
+            homeButton.setBackground(new Color(70, 130, 180)); // Bleu acier
+            homeButton.setForeground(Color.WHITE);
+            homeButton.addActionListener(e -> resetShop(homeButton));
+
+            backButtonPanel.add(homeButton, BorderLayout.CENTER);
+            productPanel.add(backButtonPanel);
+            
         }
 
         productPanel.revalidate();
